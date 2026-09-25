@@ -1,0 +1,67 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Left head -->
+  <circle
+    cx="7.2"
+    cy="6.2"
+    r="2.1"
+    stroke="#B97854"
+    stroke-width="1.7"
+  />
+
+  <!-- Right head -->
+  <circle
+    cx="16.8"
+    cy="6.2"
+    r="2.1"
+    stroke="#B97854"
+    stroke-width="1.7"
+  />
+
+  <!-- Centre head -->
+  <circle
+    cx="12"
+    cy="9.2"
+    r="2.2"
+    stroke="#B97854"
+    stroke-width="1.7"
+  />
+
+  <!-- Left person -->
+  <path
+    d="M3.8 17.8
+       V15.2
+       C3.8 12.9 5.3 11.4 7.4 11.4
+       C8.4 11.4 9.3 11.8 9.9 12.5"
+    stroke="#B97854"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Right person -->
+  <path
+    d="M20.2 17.8
+       V15.2
+       C20.2 12.9 18.7 11.4 16.6 11.4
+       C15.6 11.4 14.7 11.8 14.1 12.5"
+    stroke="#B97854"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Centre person -->
+  <path
+    d="M7.8 19.6
+       V17
+       C7.8 14.6 9.5 13 12 13
+       C14.5 13 16.2 14.6 16.2 17
+       V19.6"
+    stroke="#B97854"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+</svg>

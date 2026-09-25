@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# VS Code settings
+.vscode/
+
+# Environment variables and private configuration
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Local backup files
+*.backup.css
+*.backup.js

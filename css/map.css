@@ -1,0 +1,238 @@
+.map-section {
+  margin-bottom: 30px;
+}
+
+.memory-map {
+  position: relative;
+  height: clamp(500px, calc(100vh - var(--player-height) - 170px), 720px);
+  min-height: 480px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(246, 240, 232, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(246, 240, 232, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 70% 30%, rgba(143, 156, 150, 0.16), transparent 28%),
+    radial-gradient(circle at 24% 70%, rgba(196, 122, 79, 0.12), transparent 30%),
+    linear-gradient(135deg, #101615, #0b1012);
+  background-size: 72px 72px, 72px 72px, auto, auto, auto;
+  box-shadow: var(--shadow);
+}
+
+.memory-map::before {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border: 1px solid rgba(244, 239, 231, 0.16);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+}
+
+.map-pin {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--copper);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.map-pin::after {
+  content: attr(aria-label);
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  min-width: 130px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.82;
+  transform: translateY(-50%);
+}
+
+.map-pin:hover,
+.map-pin:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 8px rgba(185, 120, 84, 0.22);
+}
+
+.map-back-button {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  z-index:3;
+  min-height: 38px;
+  padding: 9px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(8, 10, 10, 0.78);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.map-back-button:hover {
+  background: rgba(244, 239, 231, 0.12);
+}
+
+.leaflet-map,
+.collection-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.leaflet-map {
+  z-index: 1;
+  background: var(--night);
+}
+
+.collection-map {
+  z-index: 2;
+  background:
+    linear-gradient(90deg, rgba(246, 240, 232, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(246, 240, 232, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 48% 58%, rgba(196, 122, 79, 0.2), transparent 12%),
+    radial-gradient(circle at 56% 72%, rgba(143, 156, 150, 0.12), transparent 16%),
+    radial-gradient(circle at 32% 66%, rgba(196, 122, 79, 0.11), transparent 18%),
+    linear-gradient(135deg, #0f1514, #0a0f11);
+  background-size: 44px 44px, 44px 44px, auto, auto, auto, auto;
+}
+
+.collection-map[hidden],
+.leaflet-map[hidden] {
+  display: none;
+}
+
+.leaflet-control-attribution {
+  background: rgba(8, 10, 10, 0.78);
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.leaflet-control-attribution a {
+  color: var(--soft);
+}
+
+.leaflet-place-marker {
+  display: flex;
+  gap: 0;
+  align-items: center;
+}
+
+.leaflet-place-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  flex: 0 0 auto;
+  transform: translateX(3px) scale(1.08);
+  filter:
+    drop-shadow(0 0 8px rgba(185, 120, 84, 0.85))
+    drop-shadow(0 0 20px rgba(185, 120, 84, 0.45));
+}
+
+.leaflet-marker-label {
+  margin-left: 0px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.leaflet-collection-marker {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid var(--graphite);
+  border-radius: 999px;
+  padding: 7px 11px;
+  background: rgba(8, 10, 10, 0.82);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.32);
+  transform: scale(1);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.leaflet-collection-marker.is-selected {
+  border-color: rgba(220, 147, 99, 0.84);
+  background: rgba(41, 25, 19, 0.9);
+  box-shadow:
+    0 0 0 7px rgba(185, 120, 84, 0.18),
+    0 0 34px rgba(255, 135, 104, 0.9),
+    0 16px 44px rgba(0, 0, 0, 0.42);
+  transform: scale(1.08);
+}
+
+.leaflet-collection-marker.is-selected .leaflet-collection-dot {
+  background: #d88a5c;
+  box-shadow:
+    0 0 0 7px rgba(255, 155, 117, 0.2),
+    0 0 30px rgba(255, 125, 100, 1);
+}
+
+.leaflet-collection-dot {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--copper);
+  box-shadow:
+    0 0 0 6px rgba(185, 120, 84, 0.13),
+    0 0 24px rgba(185, 120, 84, 0.8);
+}
+
+.leaflet-collection-label {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.country-pin {
+  width: 22px;
+  height: 22px;
+  box-shadow:
+    0 0 0 8px rgba(185, 120, 84, 0.16),
+    0 0 34px rgba(185, 120, 84, 0.9);
+}
+
+.city-pin {
+  width: 20px;
+  height: 20px;
+  background: var(--soft);
+  box-shadow:
+    0 0 0 8px rgba(159, 179, 173, 0.16),
+    0 0 30px rgba(159, 179, 173, 0.75);
+}
+
+.collection-pin {
+  width: 16px;
+  height: 16px;
+  box-shadow:
+    0 0 0 6px rgba(185, 120, 84, 0.12),
+    0 0 24px rgba(185, 120, 84, 0.7);
+}
+
+.map-pin {
+  animation: pinAppear 360ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+}
+
+@keyframes pinAppear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.45);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

@@ -1,0 +1,64 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Left antler -->
+  <path
+    d="M9.2 8.2C7.5 7.3 6.4 5.8 6.2 3.8
+       M7.7 6.9C6.3 6.8 5.2 6.1 4.5 5
+       M6.4 5.4C5.5 4.8 5 3.9 4.9 2.9"
+    stroke="#B97854"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Right antler -->
+  <path
+    d="M14.8 8.2C16.5 7.3 17.6 5.8 17.8 3.8
+       M16.3 6.9C17.7 6.8 18.8 6.1 19.5 5
+       M17.6 5.4C18.5 4.8 19 3.9 19.1 2.9"
+    stroke="#B97854"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Ears -->
+  <path
+    d="M9 9C7.7 8.2 6.5 8.3 5.7 9.1C6.6 10.3 7.7 10.8 9.1 10.7"
+    stroke="#B97854"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M15 9C16.3 8.2 17.5 8.3 18.3 9.1C17.4 10.3 16.3 10.8 14.9 10.7"
+    stroke="#B97854"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Deer head -->
+  <path
+    d="M9.1 8.5C9.2 11.2 9.5 14.2 10.2 16.6
+       C10.6 18 11.2 19.2 12 20
+       C12.8 19.2 13.4 18 13.8 16.6
+       C14.5 14.2 14.8 11.2 14.9 8.5
+       C14 7.8 13 7.4 12 7.4
+       C11 7.4 10 7.8 9.1 8.5Z"
+    stroke="#B97854"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Nose -->
+  <path
+    d="M11.2 17.4C11.7 17.8 12.3 17.8 12.8 17.4"
+    stroke="#B97854"
+    stroke-width="1.7"
+    stroke-linecap="round"
+  />
+
+</svg>

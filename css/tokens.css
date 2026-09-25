@@ -1,0 +1,95 @@
+:root {
+  --ink: #f6f0e8;
+  --muted: #bdb4a7;
+  --soft: #8f9c96;
+  --night: #090b0b;
+  --deep-green: #101614;
+  --blue: #172026;
+  --copper: #c47a4f;
+  --line: rgba(246, 240, 232, 0.11);
+  --panel: rgba(18, 20, 20, 0.74);
+  --panel-strong: rgba(22, 23, 23, 0.88);
+  --graphite: rgba(246, 240, 232, 0.075);
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.52);
+
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  --type-page-title: clamp(28px, 2.3vw, 32px);
+  --type-section-title: clamp(22px, 2vw, 26px);
+  --type-card-title: clamp(18px, 1.6vw, 20px);
+  --type-body: 14px;
+  --type-control: 13px;
+  --type-meta: 12px;
+  --type-label: 10px;
+
+  --space-compact: 8px;
+  --space-standard: 16px;
+  --space-section: 24px;
+  --space-panel: 20px;
+
+  --player-height: 88px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: var(--font-ui);
+  font-weight: var(--weight-regular);
+  font-feature-settings: "liga" 1, "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  background:
+    radial-gradient(circle at 64% 0%, rgba(196, 122, 79, 0.055), transparent 30%),
+    linear-gradient(180deg, #101313 0%, #090b0b 52%, #060707 100%);
+  color: var(--ink);
+}
+
+button {
+  font: inherit;
+}
+
+/*
+  Sound Capsule Icon System
+  Primary icon family: Phosphor Icons.
+  Default weight: Regular.
+  Standard sizes: 16px / 20px / 24px.
+  Icons inherit colour from their parent via currentColor.
+*/
+.sc-icon {
+  display: inline-flex;
+  width: 1em;
+  height: 1em;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  font-size: 20px;
+  line-height: 1;
+  vertical-align: -0.125em;
+  flex: 0 0 auto;
+}
+
+.sc-icon--small {
+  font-size: 16px;
+}
+
+.sc-icon--medium {
+  font-size: 20px;
+}
+
+.sc-icon--large {
+  font-size: 24px;
+}

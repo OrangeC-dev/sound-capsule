@@ -1,0 +1,407 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Sound Capsule</title>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""
+/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+
+<link rel="stylesheet" href="assets/icons/phosphor/regular/style.css" />
+
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/layout.css" />
+<link rel="stylesheet" href="css/map.css" />
+<link rel="stylesheet" href="css/cards.css" />
+<link rel="stylesheet" href="css/player.css" />
+<link rel="stylesheet" href="css/filters.css" />
+<link rel="stylesheet" href="css/explore.css" />
+<link rel="stylesheet" href="css/home.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+<link rel="stylesheet" href="css/mobile.css" />
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar" aria-label="Sound Capsule navigation">
+      <button class="sidebar-brand" type="button" id="home-link" aria-label="Go to Sound Capsule home">
+        <img src="assets/logo-symbol-transparent.png" alt="Sound Capsule logo" />
+        <span>Sound<br />Capsule</span>
+      </button>
+
+      <button
+        class="mobile-menu-toggle"
+        id="mobile-menu-toggle"
+        type="button"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <i class="ph ph-list sc-icon sc-icon--medium" aria-hidden="true"></i>
+      </button>
+
+      <nav class="sidebar-nav" id="mobile-menu" aria-label="Main navigation">
+        <button class="app-nav-item is-active" type="button" data-app-section="map">
+          <i class="ph ph-map-trifold sc-icon sc-icon--small app-nav-icon" aria-hidden="true"></i>
+          <span>Map</span>
+        </button>
+
+        <button class="app-nav-item" type="button" data-app-section="explore">
+          <i class="ph ph-compass sc-icon sc-icon--small app-nav-icon" aria-hidden="true"></i>
+          <span>Explore</span>
+        </button>
+
+        <button class="app-nav-item" type="button" data-app-section="saved">
+          <i class="ph ph-bookmark-simple sc-icon sc-icon--small app-nav-icon" aria-hidden="true"></i>
+          <span>Saved</span>
+        </button>
+
+        <button class="app-nav-item" type="button" data-app-section="profile">
+          <i class="ph ph-user-circle sc-icon sc-icon--small app-nav-icon" aria-hidden="true"></i>
+          <span>Profile</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-about">
+        <strong>About Sound Capsule</strong>
+        <p>Preserving the world’s soundscapes, one moment at a time.</p>
+      </div>
+    </aside>
+
+    <div class="app-content">
+
+      <main>
+                <section class="home-section" id="home-view" aria-labelledby="home-title">
+          <div class="home-hero">
+            <div class="home-hero-content">
+              <p class="eyebrow">Places Hold Stories</p>
+
+              <h1 id="home-title">
+                Preserving the sound of places,
+                <span>one moment at a time.</span>
+              </h1>
+
+              <p class="home-hero-copy">
+                Field recordings capturing how places sounded at a particular moment in time.
+              </p>
+              <button class="home-primary-action" type="button" id="home-explore-link">
+                Start Listening
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+
+          <section class="home-featured" aria-labelledby="home-featured-title">
+            <p class="eyebrow" id="home-featured-title">Featured Capsule</p>
+
+            <article class="home-featured-card" id="home-featured-card" tabindex="0" role="button">
+              <span class="home-featured-thumb" id="home-featured-thumb" aria-hidden="true"></span>
+
+              <span class="home-featured-copy">
+                <strong>Sunday Bells</strong>
+                <span>St Patrick's Park</span>
+                <span>Dublin, Ireland</span>
+              </span>
+
+              <span class="home-featured-duration">12:36</span>
+
+              <button class="play-button home-featured-play" id="home-featured-play" type="button">
+                <span class="play-icon" aria-hidden="true"></span>
+
+                <span class="playing-wave" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+
+                <span class="play-text">Play</span>
+              </button>
+            </article>
+          </section>
+
+          <section class="home-collection-preview" aria-labelledby="home-collections-title">
+            <p class="eyebrow" id="home-collections-title">Discover Collections</p>
+
+            <div class="home-collection-row">
+              <button class="home-collection-card" type="button" data-home-collection-id="dublinParks">
+                <span>Parks & Gardens</span>
+                <small>4 Capsules</small>
+              </button>
+
+              <button class="home-collection-card" type="button" data-home-collection-id="dublinStreets">
+                <span>Streets</span>
+                <small>3 Capsules</small>
+              </button>
+
+              <button class="home-collection-card" type="button" data-home-collection-id="dublinTransport">
+                <span>Transport</span>
+                <small>2 Capsules</small>
+              </button>
+
+              <button class="home-collection-card" type="button" data-home-collection-id="dublinCoastal">
+                <span>Coastal & Water</span>
+                <small>1 Capsule</small>
+              </button>
+            </div>
+          </section>
+
+          <section class="home-preservation">
+            <p class="eyebrow">A Quieter, More Connected World</p>
+            <p>
+              Sound Capsule is a growing archive of real places, real sounds and real moments,
+              preserving everyday soundscapes over time.
+            </p>
+          </section>
+        </section>
+        <section class="map-section" aria-labelledby="map-title">
+          <div class="map-page-header">
+            <div class="map-title-group">
+              <h2 id="map-title">Sound Map</h2>
+              <p class="page-subtitle" id="map-subtitle">Explore places through their sounds.</p>
+            </div>
+
+            <aside class="map-instruction-card" aria-label="Map instruction">
+              <span class="status-dot"></span>
+              <p id="now-playing">Choose a country to begin</p>
+            </aside>
+          </div>
+
+          <div class="memory-map" id="memory-map" aria-label="Memory locations">
+            <div id="leaflet-map" class="leaflet-map"></div>
+            <div id="collection-map" class="collection-map" hidden></div>
+          </div>
+        </section>
+
+        <section class="memory-section explore-section" aria-labelledby="memory-title" hidden>
+          <div class="section-heading explore-heading explore-city-hero">
+            <div class="explore-city-map" id="explore-city-map" aria-hidden="true"></div>
+            <div class="explore-city-gradient" aria-hidden="true"></div>
+
+            <div class="explore-city-content">
+              <div class="explore-city-copy">
+                <h2 id="memory-title">Dublin</h2>
+                <p class="page-subtitle" id="memory-subtitle">The sound of a city, captured in time.</p>
+              </div>
+
+              <div class="explore-toolbar" id="explore-filter-row">
+                <label class="explore-search">
+                  <span class="explore-search-icon" aria-hidden="true"></span>
+                  <input
+                    id="explore-search"
+                    type="search"
+                    placeholder="Search places, collections, sounds..."
+                    autocomplete="off"
+                  />
+                </label>
+
+                <button class="explore-filter-button" type="button">
+                  Filter
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="explore-collections-header">
+            <h3>Collections</h3>
+          </div>
+
+          <div class="capsule-grid explore-collection-grid" id="capsule-grid"></div>
+        </section>
+
+        <section class="app-placeholder" id="saved-view" hidden>
+          <p class="eyebrow">Saved</p>
+          <h2>Saved</h2>
+          <p class="page-subtitle" id="saved-subtitle">Memories you want to return to.</p>
+        </section>
+
+        <section class="app-placeholder" id="profile-view" hidden>
+          <p class="eyebrow">Profile</p>
+          <h2>Profile</h2>
+          <p class="page-subtitle" id="profile-subtitle">Manage your Sound Capsule experience.</p>
+        </section>
+
+        <section class="capsule-view" id="capsule-view" aria-label="Capsule view" hidden>
+          <div class="capsule-view-topbar">
+            <button class="capsule-back-button" id="capsule-view-back" type="button">
+              &larr; Back
+            </button>
+          </div>
+
+          <div class="capsule-hero">
+            <div class="capsule-visual-carousel" id="capsule-visual-carousel">
+              <div class="capsule-visuals" id="capsule-visuals" aria-label="Capsule visuals">
+                <figure class="capsule-visual-slide is-active">
+                  <div class="player-map-thumb capsule-map-thumb" id="capsule-view-map-thumb" aria-hidden="true"></div>
+                </figure>
+
+                <figure class="capsule-visual-slide capsule-photo-slide" id="capsule-view-photo-slide" hidden>
+                  <img id="capsule-view-image" src="" alt="" />
+                </figure>
+
+                <figure class="capsule-visual-slide capsule-map-loop-slide" id="capsule-view-map-loop-slide" hidden>
+                  <div class="player-map-thumb capsule-map-thumb" id="capsule-view-map-loop-thumb" aria-hidden="true"></div>
+                </figure>
+              </div>
+
+              <div class="capsule-visual-indicators" id="capsule-visual-indicators" hidden>
+                <span class="is-active"></span>
+                <span></span>
+              </div>
+
+              <button class="capsule-visual-next" id="capsule-visual-next" type="button" aria-label="View next image" hidden>
+                <span aria-hidden="true"></span>
+              </button>
+            </div>
+
+            <div class="capsule-identity">
+              <h2 id="capsule-view-title">Choose a memory</h2>
+
+              <p class="capsule-meta-row">
+                <span class="capsule-meta-icon capsule-location-icon" aria-hidden="true"></span>
+                <span id="capsule-view-location">Sound Capsule</span>
+              </p>
+
+              <p class="capsule-meta-row">
+                <span class="capsule-meta-icon capsule-date-icon" aria-hidden="true"></span>
+                <span class="capsule-date" id="capsule-view-date"></span>
+              </p>
+            </div>
+          </div>
+
+          <section class="capsule-content-section capsule-signature-section" id="capsule-view-signature" hidden>
+            <div class="capsule-signature-section-inner">
+              <div class="capsule-signature-header">
+                <div class="capsule-signature-copy">
+                  <p class="capsule-signature-eyebrow">Signature Sound</p>
+
+                  <h3 class="capsule-signature-heading" id="capsule-view-signature-value"> 
+                    Signature sound
+                  </h3>
+                </div>
+
+                <button
+                  class="capsule-signature-toggle"
+                  id="capsule-signature-toggle"
+                  type="button"
+                  aria-expanded="true"
+                  aria-controls="capsule-view-signature-description"
+                  aria-label="Toggle Signature Sound story"
+                >
+                  <span class="capsule-signature-controls">
+                    <span class="capsule-signature-action-icon" aria-hidden="true"></span>
+                    <span class="capsule-signature-chevron" aria-hidden="true"></span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="capsule-signature-story">
+                <p id="capsule-view-signature-description"></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="capsule-content-section">
+            <h3>DETAILS</h3>
+            <div class="capsule-detail-grid" id="capsule-view-details"></div>
+          </section>
+
+          <section class="capsule-content-section">
+            <h3>LISTENING XP</h3>
+            <p class="capsule-section-subtitle">
+              Shape the listening experience without altering the original recording.
+            </p>
+
+            <div class="capsule-listening-presets" aria-label="Listening XP presets">
+              <button class="is-active" type="button">Original</button>
+              <button type="button">Warm</button>
+              <button type="button">Detail</button>
+              <button type="button">Custom</button>
+            </div>
+
+            <p class="capsule-preservation-note">
+              These adjustments only affect your playback. The original recording remains unchanged.
+            </p>
+
+            <button class="capsule-reset-button" type="button">
+              Reset to Original
+            </button>
+          </section>
+        </section>
+      </main>
+    </div>
+
+  <aside class="persistent-player" id="persistent-player" aria-label="Persistent audio player" hidden>
+    <div class="persistent-player-inner">
+      <div class="persistent-player-track">
+        <div class="persistent-player-art" aria-hidden="true">
+          <div class="player-map-thumb persistent-map-thumb" id="persistent-player-map-thumb"></div>
+
+          <img id="persistent-player-image" src="" alt="" hidden />
+          <div class="persistent-player-art-fallback" id="persistent-player-art-fallback">
+            <img src="assets/logo-symbol-transparent.png" alt="" />
+          </div>
+        </div>
+
+        <div class="persistent-player-copy">
+          <p id="persistent-player-title">Choose a memory</p>
+          <span id="persistent-player-location">Sound Capsule</span>
+        </div>
+      </div>
+
+      <div class="persistent-player-controls">
+        <button class="persistent-player-toggle" id="persistent-player-toggle" type="button" aria-label="Play or pause">
+          <span class="persistent-player-play-icon" aria-hidden="true"></span>
+          <span class="persistent-player-pause-icon" aria-hidden="true"></span>
+        </button>
+
+        <div class="persistent-player-progress-wrap">
+          <span id="persistent-player-current">0:00</span>
+          <input
+            id="persistent-player-progress"
+            class="persistent-player-progress"
+            type="range"
+            min="0"
+            max="100"
+            value="0"
+            step="0.1"
+            aria-label="Audio progress"
+          />
+          <span id="persistent-player-duration">0:00</span>
+        </div>
+      </div>
+
+      <button class="persistent-player-open" id="persistent-player-open" type="button">
+        More
+      </button>
+    </div>
+  </aside>
+</div>
+
+  <script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
+
+<script src="js/data.js"></script>
+<script src="js/map.js"></script>
+<script src="js/cards.js"></script>
+<script src="js/player.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/home.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

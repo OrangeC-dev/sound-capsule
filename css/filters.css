@@ -1,0 +1,49 @@
+.explore-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: -4px 0 22px;
+}
+
+.explore-filter-row[hidden] {
+  display: none;
+}
+
+.filter-pill,
+.filter-select,
+.sort-control select {
+  min-height: 34px;
+  border: 1px solid var(--graphite);
+  border-radius: 999px;
+  background: rgba(16, 18, 18, 0.82);
+  color: rgba(246, 240, 232, 0.84);
+  font-size: var(--type-control);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+}
+
+.filter-pill {
+  padding: 0 17px;
+  cursor: pointer;
+}
+
+.filter-pill.is-active {
+  border-color: rgba(196, 122, 79, 0.76);
+  background: var(--copper);
+  color: var(--night);
+}
+
+.filter-select,
+.sort-control select {
+  padding: 0 34px 0 14px;
+}
+
+.sort-control {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
+  color: rgba(189, 180, 167, 0.78);
+  font-size: 13px;
+}

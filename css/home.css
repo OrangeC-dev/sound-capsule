@@ -1,0 +1,266 @@
+.home-section {
+  display: grid;
+  gap: 28px;
+  max-width: none;
+  margin: 0;
+  padding-bottom: 36px;
+}
+
+.home-section[hidden] {
+  display: none;
+}
+
+.home-hero {
+  --home-hero-image: url("../assets/images/collections/dublin-weather.jpg");
+
+  position: relative;
+  min-height: 520px;
+  margin: calc(-1 * var(--space-section)) calc(-1 * var(--space-section)) 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background:
+    radial-gradient(ellipse at 24% 43%, rgba(7, 9, 9, 0.9) 0%, rgba(7, 9, 9, 0.68) 32%, rgba(7, 9, 9, 0) 62%),
+    linear-gradient(90deg, #070909 0%, rgba(7, 9, 9, 0.96) 16%, rgba(7, 9, 9, 0.68) 44%, rgba(7, 9, 9, 0.24) 78%, rgba(7, 9, 9, 0.12) 100%),
+    linear-gradient(180deg, rgba(7, 9, 9, 0.14) 0%, rgba(7, 9, 9, 0.28) 54%, #070909 100%),
+    radial-gradient(circle at 72% 38%, rgba(196, 122, 79, 0.16), transparent 32%),
+    var(--home-hero-image) center / cover no-repeat;
+  box-shadow: none;
+}
+
+.home-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 52%;
+  background: linear-gradient(180deg, transparent 0%, rgba(7, 9, 9, 0.72) 58%, #070909 100%);
+  pointer-events: none;
+}
+
+.home-hero-content {
+  --home-hero-text-x: clamp(8px, 0vw, 30px);
+  --home-hero-text-y: 0px;
+
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 18px;
+  align-content: center;
+  width: min(1180px, 100%);
+  min-height: 520px;
+  margin: 0 auto;
+  padding: 56px;
+  padding-left: var(--home-hero-text-x);
+  transform: translateY(var(--home-hero-text-y));
+}
+
+.home-hero-content > * {
+  max-width: 560px;
+}
+
+.home-hero .eyebrow,
+.home-featured .eyebrow,
+.home-collection-preview .eyebrow,
+.home-preservation .eyebrow {
+  color: rgba(198, 190, 176, 0.72);
+  letter-spacing: 0.18em;
+}
+
+.home-hero h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: var(--weight-semibold);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.home-hero h1 span {
+  display: block;
+  color: var(--copper);
+  font-style: italic;
+  font-weight: var(--weight-regular);
+}
+
+.home-hero-copy {
+  max-width: 430px;
+  margin: 0;
+  color: rgba(246, 240, 232, 0.72);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.home-primary-action {
+  display: inline-flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f0a260, #d37b45);
+  color: #120d0a;
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  box-shadow: 0 18px 42px rgba(196, 122, 79, 0.24);
+}
+
+.home-primary-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 50px rgba(196, 122, 79, 0.32);
+}
+
+.home-featured,
+.home-collection-preview,
+.home-preservation {
+  display: grid;
+  width: min(1180px, 100%);
+  margin-inline: auto;
+}
+
+.home-featured,
+.home-collection-preview,
+.home-preservation {
+  gap: 12px;
+}
+
+.home-featured-card {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr) auto 46px;
+  gap: 18px;
+  align-items: center;
+  width: 100%;
+  min-height: 96px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(198, 190, 176, 0.09);
+  border-radius: 14px;
+  background:
+    linear-gradient(135deg, rgba(246, 240, 232, 0.055), rgba(246, 240, 232, 0.02)),
+    rgba(9, 12, 12, 0.9);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.home-featured-card:hover,
+.home-featured-card:focus-visible {
+  outline: none;
+  border-color: rgba(196, 122, 79, 0.34);
+  transform: translateY(-2px);
+}
+
+.home-featured-thumb {
+  position: relative;
+  display: block;
+  align-self: stretch;
+  width: 132px;
+  height: 100%;
+  min-height: 96px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 14px;
+  background: #070909;
+}
+
+.home-featured-copy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 16px 0;
+}
+
+.home-featured-copy strong {
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: var(--weight-semibold);
+}
+
+.home-featured-copy span {
+  color: rgba(198, 190, 176, 0.72);
+  font-size: 13px;
+}
+
+.home-featured-duration {
+  color: rgba(198, 190, 176, 0.64);
+  font-size: 12px;
+}
+
+.home-featured-play {
+  width: 46px;
+  height: 46px;
+  justify-self: end;
+  margin-right: 16px;
+}
+
+.home-collection-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.home-collection-card {
+  display: grid;
+  align-content: end;
+  gap: 4px;
+  min-height: 150px;
+  padding: 14px;
+  border: 1px solid rgba(198, 190, 176, 0.1);
+  border-radius: 10px;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  background:
+    linear-gradient(180deg, transparent 18%, rgba(0, 0, 0, 0.78) 100%),
+    var(--home-card-image) center / cover no-repeat;
+}
+
+.home-collection-card:hover {
+  border-color: rgba(196, 122, 79, 0.34);
+  transform: translateY(-2px);
+}
+
+.home-collection-card span {
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+}
+
+.home-collection-card small {
+  color: rgba(198, 190, 176, 0.72);
+  font-size: 12px;
+}
+
+.home-collection-card:nth-child(1) {
+  --home-card-image: url("../assets/images/collections/dublin-parks.jpg");
+}
+
+.home-collection-card:nth-child(2) {
+  --home-card-image: url("../assets/images/collections/dublin-streets.jpg");
+}
+
+.home-collection-card:nth-child(3) {
+  --home-card-image: url("../assets/images/collections/dublin-transport.jpg");
+}
+
+.home-collection-card:nth-child(4) {
+  --home-card-image: url("../assets/images/collections/dublin-coastal.jpg");
+}
+
+.home-preservation {
+  width: min(1180px, 100%);
+  max-width: none;
+  justify-items: start;
+  padding: 20px 0 6px;
+  text-align: left;
+}
+
+.home-preservation p:last-child {
+  max-width: 640px;
+  margin: 0;
+  color: rgba(246, 240, 232, 0.72);
+  font-size: 15px;
+  line-height: 1.6;
+}

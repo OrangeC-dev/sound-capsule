@@ -1,0 +1,39 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Vehicle body -->
+  <path
+    d="M7 17V8.5C7 6.3 8.8 5 12 5C15.2 5 17 6.3 17 8.5V17C17 18.1 16.1 19 15 19H9C7.9 19 7 18.1 7 17Z"
+    stroke="#B97854"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Front window -->
+  <path
+    d="M8.8 8.5H15.2V12.5H8.8Z"
+    stroke="#B97854"
+    stroke-width="1.5"
+    stroke-linejoin="round"
+  />
+
+  <!-- Lights -->
+  <circle cx="9.5" cy="15.5" r="0.8" fill="#B97854"/>
+  <circle cx="14.5" cy="15.5" r="0.8" fill="#B97854"/>
+
+  <!-- Rails / base -->
+  <path
+    d="M9 19L7.5 21"
+    stroke="#B97854"
+    stroke-width="1.5"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M15 19L16.5 21"
+    stroke="#B97854"
+    stroke-width="1.5"
+    stroke-linecap="round"
+  />
+
+</svg>
