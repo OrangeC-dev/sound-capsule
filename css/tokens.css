@@ -32,6 +32,11 @@
   --space-panel: 20px;
 
   --player-height: 88px;
+
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
 }
 
 * {
@@ -46,6 +51,7 @@ body {
 body {
   margin: 0;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   font-family: var(--font-ui);
   font-weight: var(--weight-regular);

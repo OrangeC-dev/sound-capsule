@@ -745,6 +745,7 @@
     overflow: auto;
     height: auto;
     min-height: 100vh;
+    min-height: 100dvh;
   }
 
   .app-shell {
@@ -752,6 +753,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr) var(--player-height);
     height: 100vh;
+    height: 100dvh;
     min-height: 0;
     overflow: hidden;
   }
