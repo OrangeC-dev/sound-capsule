@@ -43,9 +43,13 @@
   box-sizing: border-box;
 }
 
-html,
-body {
+html {
   height: 100%;
+  background: #090b0b;
+}
+
+body {
+  min-height: 100%;
 }
 
 body {
