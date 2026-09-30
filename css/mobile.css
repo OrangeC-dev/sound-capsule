@@ -10,18 +10,31 @@
   }
 
   body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .app-shell {
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: auto;
+    grid-template-rows: auto auto 0;
+    overflow: visible;
+  }
+
+  body.has-persistent-player {
     height: 100vh;
     height: 100dvh;
     overflow: hidden;
   }
 
-  .app-shell {
+  body.has-persistent-player .app-shell {
     height: 100vh;
     height: 100dvh;
-    grid-template-rows: auto minmax(0, 1fr) 0;
-  }
-
-  body.has-persistent-player .app-shell {
+    overflow: hidden;
     grid-template-rows: auto minmax(0, 1fr) var(--mobile-player-area);
   }
 
@@ -167,6 +180,11 @@
     padding: 18px 10px var(--safe-area-bottom);
   }
 
+  body:not(.has-persistent-player) .app-content {
+    height: auto;
+    overflow: visible;
+  }
+
   body.has-persistent-player .app-content {
     padding-bottom: var(--safe-area-bottom);
   }
@@ -215,6 +233,11 @@
   }
 
   .persistent-player {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1500;
     height: var(--mobile-player-area);
     min-height: var(--mobile-player-area);
     background:

@@ -588,54 +588,13 @@
 }
 
 .capsule-meta-icon {
-  position: relative;
   justify-self: center;
   width: 24px;
   height: 24px;
   color: var(--copper);
+  font-size: 24px;
+  line-height: 1;
   opacity: 0.9;
-}
-
-.capsule-location-icon::before {
-  content: "";
-  position: absolute;
-  left: 6px;
-  top: 3px;
-  width: 10px;
-  height: 10px;
-  border: 2px solid currentColor;
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-}
-
-.capsule-location-icon::after {
-  content: "";
-  position: absolute;
-  left: 10px;
-  top: 7px;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.capsule-date-icon::before {
-  content: "";
-  position: absolute;
-  inset: 5px 4px 3px;
-  border: 1.8px solid currentColor;
-  border-radius: 3px;
-}
-
-.capsule-date-icon::after {
-  content: "";
-  position: absolute;
-  left: 7px;
-  right: 7px;
-  top: 3px;
-  height: 6px;
-  border-left: 1.8px solid currentColor;
-  border-right: 1.8px solid currentColor;
 }
 
 .capsule-date:empty {
