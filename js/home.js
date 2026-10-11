@@ -1,15 +1,64 @@
 let homeFeaturedThumbMap = null;
 
 function getHomeFeaturedMemory() {
-  const memory = (collectionMemories.dublinParks || []).find(function(item) {
-    return item.title === "Sunday Bells";
+  const playableMemories = [];
+
+  Object.keys(collectionMemories).forEach(function(collectionId) {
+    const collection = getExploreCollectionById(collectionId);
+    const memories = collectionMemories[collectionId] || [];
+
+    memories.forEach(function(memory) {
+      if (!memory.audio || memory.duration === "Coming soon") {
+        return;
+      }
+
+      playableMemories.push(
+        addCollectionContext(
+          memory,
+          collectionId,
+          collection ? collection.name : ""
+        )
+      );
+    });
   });
 
-  if (!memory) {
+  if (!playableMemories.length) {
     return null;
   }
 
-  return addCollectionContext(memory, "dublinParks", "Parks & Gardens");
+  return playableMemories[Math.floor(Math.random() * playableMemories.length)];
+}
+
+function renderHomeFeaturedContent(memory) {
+  const featuredName = document.getElementById("home-featured-name");
+  const featuredLocation = document.getElementById("home-featured-location");
+  const featuredRegion = document.getElementById("home-featured-region");
+  const featuredDuration = document.getElementById("home-featured-duration");
+
+  if (!memory) {
+    return;
+  }
+
+  const region = memory.cityCountry || [
+    memory.city || memory.town,
+    memory.country
+  ].filter(Boolean).join(", ");
+
+  if (featuredName) {
+    featuredName.textContent = memory.title;
+  }
+
+  if (featuredLocation) {
+    featuredLocation.textContent = memory.location || "Sound Capsule";
+  }
+
+  if (featuredRegion) {
+    featuredRegion.textContent = region || "Sound Capsule";
+  }
+
+  if (featuredDuration) {
+    featuredDuration.textContent = memory.duration || "0:00";
+  }
 }
 
 function setHomeFeaturedButtonData(button, memory) {
@@ -49,6 +98,7 @@ function setupHomeInteractions() {
   const featuredMemory = getHomeFeaturedMemory();
 
   if (featuredCard && featuredPlayButton && featuredMemory) {
+    renderHomeFeaturedContent(featuredMemory);
     setHomeFeaturedButtonData(featuredPlayButton, featuredMemory);
     renderHomeFeaturedThumbnail(featuredMemory);
 

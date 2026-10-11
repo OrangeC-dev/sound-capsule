@@ -66,7 +66,31 @@ function initializeMemoryCardMap(card, memory) {
   }, 80);
 }
 
-function renderExploreCityMap() {
+function getExploreMapContext(contextId) {
+  const isMobile = window.matchMedia("(max-width: 480px)").matches;
+
+  const contexts = {
+    world: {
+      center: isMobile ? [-5, 0] : [20, 0],
+      zoom: isMobile ? 1.15 : 2,
+      pins: []
+    },
+    ireland: {
+      center: isMobile ? [51.85, -10.8] : [53.35, -7.8],
+      zoom: isMobile ? 5.5 : 6.4,
+      pins: []
+    },
+    netherlands: {
+      center: isMobile ? [50.34, 3.20] : [52.28, 5.2],
+      zoom: isMobile ? 6.48 : 7.25,
+      pins: []
+    }
+  };
+
+  return contexts[contextId] || contexts.world;
+}
+
+function renderExploreCityMap(contextId) {
   if (!exploreCityMap || typeof L === "undefined") {
     return;
   }
@@ -75,6 +99,8 @@ function renderExploreCityMap() {
     exploreCityLeafletMap.remove();
     exploreCityLeafletMap = null;
   }
+
+  const mapContext = getExploreMapContext(contextId || "world");
 
   exploreCityMap.innerHTML = "";
 
@@ -88,7 +114,7 @@ function renderExploreCityMap() {
     boxZoom: false,
     keyboard: false,
     tap: false
-  }).setView([53.305, -6.455], 12);
+  }).setView(mapContext.center, mapContext.zoom);
 
   L.tileLayer(getCartoBasemapUrl("dark_nolabels"), {
     subdomains: "abcd",
@@ -96,24 +122,7 @@ function renderExploreCityMap() {
     className: "explore-city-tile"
   }).addTo(exploreCityLeafletMap);
 
-  const desktopExploreCityPins = [
-    [53.3570, -6.3945],
-    [53.3421, -6.2700],
-    [53.3489, -6.2488],
-    [53.3368, -6.3510],
-    [53.3514, -6.2942]
-  ];
-
-  const mobileExploreCityPins = [
-    [53.3390, -6.4015],
-    [53.3485, -6.3900]
-  ];
-
-  const exploreCityPins = window.matchMedia("(max-width: 480px)").matches
-    ? mobileExploreCityPins
-    : desktopExploreCityPins;
-
-  exploreCityPins.forEach(function(position) {
+  (mapContext.pins || []).forEach(function(position) {
     L.marker(position, {
       icon: L.divIcon({
         className: "",
@@ -293,6 +302,11 @@ function renderMemoryCards(memories, collectionId, collectionTitle) {
 }
 
 let currentExploreCollectionId = null;
+let currentExploreView = {
+  level: "world",
+  countryId: "",
+  placeId: ""
+};
 
 function getCollectionCapsuleCount(collectionId) {
   return (collectionMemories[collectionId] || []).length;
@@ -304,19 +318,29 @@ function getExploreCollectionById(collectionId) {
   });
 }
 
+function getExploreCountryById(countryId) {
+  return exploreArchive.countries.find(function(country) {
+    return country.id === countryId;
+  });
+}
+
+function getCollectionCapsuleTotal(collectionIds) {
+  return (collectionIds || []).reduce(function(total, collectionId) {
+    return total + getCollectionCapsuleCount(collectionId);
+  }, 0);
+}
+
+function getExploreCountryCapsuleCount(country) {
+  if (!country) {
+    return 0;
+  }
+
+  return getCollectionCapsuleTotal(country.collectionIds || []);
+}
+
 function getCollectionSearchText(collection) {
   const memories = collectionMemories[collection.id] || [];
-  const memoryText = memories.map(function(memory) {
-    return [
-      memory.title,
-      memory.location,
-      memory.cityCountry,
-      memory.signatureSound && memory.signatureSound.label,
-      ...(memory.publicTags || []),
-      ...(memory.hiddenSoundTags || []),
-      ...(memory.hiddenMoodTags || [])
-    ].filter(Boolean).join(" ");
-  }).join(" ");
+  const memoryText = memories.map(getMemorySearchText).join(" ");
 
   return [
     collection.name,
@@ -330,11 +354,70 @@ function getMemorySearchText(memory) {
     memory.title,
     memory.location,
     memory.cityCountry,
+    memory.country,
+    memory.region,
+    memory.city,
+    memory.town,
     memory.signatureSound && memory.signatureSound.label,
     ...(memory.publicTags || []),
     ...(memory.hiddenSoundTags || []),
     ...(memory.hiddenMoodTags || [])
   ].filter(Boolean).join(" ").toLowerCase();
+}
+
+function getMemoryLocationLabel(memory) {
+  const placeParts = [
+    memory.city || memory.town,
+    memory.country
+  ].filter(Boolean);
+
+  if (placeParts.length) {
+    return `${memory.location}${memory.location ? ", " : ""}${placeParts.join(", ")}`;
+  }
+
+  if (memory.cityCountry) {
+    return `${memory.location}${memory.location ? ", " : ""}${memory.cityCountry}`;
+  }
+
+  return memory.location || "";
+}
+
+function createExploreNavigationCard(item, count, onSelect) {
+  const card = document.createElement("article");
+
+  card.className = "explore-collection-card";
+  card.dataset.theme = item.theme || "streets";
+  card.dataset.archiveId = item.id;
+
+  card.innerHTML = `
+    <div class="explore-collection-visual" aria-hidden="true">
+      ${
+        item.image
+          ? `<img src="${escapeAttribute(item.image)}" alt="" />`
+          : ""
+      }
+    </div>
+
+    <div class="explore-collection-content">
+      <h4>${item.name}</h4>
+      <p>${count} ${count === 1 ? "Capsule" : "Capsules"}</p>
+    </div>
+
+    <button
+      class="explore-collection-play"
+      type="button"
+      aria-label="Open ${escapeAttribute(item.name)}"
+    ></button>
+  `;
+
+  card.addEventListener("click", onSelect);
+
+  card.querySelector(".explore-collection-play").addEventListener("click", function(event) {
+    event.stopPropagation();
+    onSelect();
+  });
+
+  return card;
 }
 
 function createExploreCollectionCard(collection) {
@@ -406,6 +489,8 @@ function createExploreCollectionCard(collection) {
 function renderExploreCollections(collections) {
   currentExploreCollectionId = null;
   memorySection.classList.add("is-explore-landing");
+  memorySection.classList.remove("is-explore-world");
+  memorySection.classList.remove("is-explore-country");
   memorySection.classList.remove("is-explore-list");
   memorySection.classList.remove("is-map-collection");
 
@@ -430,6 +515,153 @@ function renderExploreCollections(collections) {
   collections.forEach(function(collection) {
     capsuleGrid.appendChild(createExploreCollectionCard(collection));
   });
+}
+
+function renderExploreCountryCards(countries) {
+  if (currentExploreView.level !== "world") {
+    return;
+  }
+
+  capsuleGrid.className = "capsule-grid explore-collection-grid";
+  capsuleGrid.innerHTML = "";
+
+  const collectionsHeader = document.querySelector(".explore-collections-header h3");
+
+  if (collectionsHeader) {
+    collectionsHeader.textContent = "Countries";
+  }
+
+  if (!countries.length) {
+    capsuleGrid.innerHTML = `
+      <div class="explore-empty-state">
+        No countries found for this search.
+      </div>
+    `;
+    return;
+  }
+
+  countries.forEach(function(country) {
+    capsuleGrid.appendChild(
+      createExploreNavigationCard(
+        country,
+        getExploreCountryCapsuleCount(country),
+        function() {
+          renderExploreCountry(country.id);
+        }
+      )
+    );
+  });
+}
+
+function renderExploreWorld() {
+  currentExploreCollectionId = null;
+  currentExploreView = {
+    level: "world",
+    countryId: "",
+    placeId: ""
+  };
+
+  memorySection.classList.add("is-explore-landing");
+  memorySection.classList.add("is-explore-world");
+  memorySection.classList.remove("is-explore-country");
+  memorySection.classList.remove("is-explore-list");
+  memorySection.classList.remove("is-map-collection");
+
+  memoryTitle.textContent = "World";
+  memorySubtitle.textContent = "Choose a country to explore its sound archive.";
+
+  const searchInput = document.getElementById("explore-search");
+
+  if (searchInput) {
+    searchInput.value = "";
+    searchInput.placeholder = "Search countries, places, collections, sounds...";
+  }
+
+  renderExploreCityMap("world");
+
+  capsuleGrid.className = "capsule-grid explore-collection-grid";
+  capsuleGrid.innerHTML = "";
+
+  const collectionsHeader = document.querySelector(".explore-collections-header h3");
+
+  if (collectionsHeader) {
+    collectionsHeader.textContent = "Countries";
+  }
+
+  renderExploreCountryCards(exploreArchive.countries);
+
+  nowPlayingText.textContent = "Choose a country to explore its sound capsules.";
+}
+
+function renderExploreCountry(countryId) {
+  const country = getExploreCountryById(countryId);
+  const collectionsHeader = document.querySelector(".explore-collections-header h3");
+
+  if (!country) {
+    renderExploreWorld();
+    return;
+  }
+
+  currentExploreCollectionId = null;
+  currentExploreView = {
+    level: "country",
+    countryId: country.id,
+    placeId: ""
+  };
+
+  memorySection.classList.add("is-explore-landing");
+  memorySection.classList.add("is-explore-country");
+  memorySection.classList.remove("is-explore-world");
+  memorySection.classList.remove("is-explore-list");
+  memorySection.classList.remove("is-map-collection");
+
+  memoryTitle.innerHTML = `
+    <button class="explore-back-button" type="button" aria-label="Back to countries">←</button>
+    <span>${country.name}</span>
+  `;
+  memorySubtitle.textContent = country.summary || "";
+
+  const searchInput = document.getElementById("explore-search");
+
+  if (searchInput) {
+    searchInput.value = "";
+    searchInput.placeholder = `Search ${country.name} collections, places, sounds...`;
+  }
+  
+  renderExploreCityMap(country.id);
+
+  capsuleGrid.className = "capsule-grid explore-collection-grid";
+  capsuleGrid.innerHTML = "";
+
+  if (collectionsHeader) {
+    collectionsHeader.textContent = "Collections";
+  }
+
+  (country.collectionIds || []).forEach(function(collectionId) {
+    const collection = getExploreCollectionById(collectionId);
+
+    if (collection) {
+      capsuleGrid.appendChild(createExploreCollectionCard(collection));
+    }
+  });
+
+  if (!country.collectionIds || !country.collectionIds.length) {
+    capsuleGrid.innerHTML = `
+      <div class="explore-empty-state">
+        Collections for ${country.name} will appear here.
+      </div>
+    `;
+  }
+
+  const backButton = memoryTitle.querySelector(".explore-back-button");
+
+  if (backButton) {
+    backButton.addEventListener("click", function() {
+      renderExploreWorld();
+    });
+  }
+
+  nowPlayingText.textContent = `Viewing ${country.name} collections.`;
 }
 
 function createExplorePlayButton(memory, memoryId) {
@@ -495,7 +727,7 @@ function createExploreCapsuleRow(memory) {
 
     <div class="explore-row-main">
       <h4>${memoryWithContext.title}</h4>
-      <p>${memoryWithContext.location}${memoryWithContext.cityCountry ? `, ${memoryWithContext.cityCountry.replace("Dublin, ", "")}` : ""}</p>
+      <p>${getMemoryLocationLabel(memoryWithContext)}</p>
     </div>
 
     ${signatureMarkup}
@@ -565,12 +797,25 @@ function renderExploreCollectionList(collectionId) {
   const collectionsHeader = document.querySelector(".explore-collections-header h3");
 
   currentExploreCollectionId = collectionId;
+  currentAppSection = "explore";
+
+  homeView.hidden = true;
+  mapSection.hidden = true;
+  memorySection.hidden = false;
+  savedView.hidden = true;
+  profileView.hidden = true;
+  capsuleView.hidden = true;
+  document.body.classList.remove("has-capsule-view");
+  exploreFilterRow.hidden = false;
+
   memorySection.classList.remove("is-explore-landing");
+  memorySection.classList.remove("is-explore-world");
+  memorySection.classList.remove("is-explore-country");
   memorySection.classList.add("is-explore-list");
   memorySection.classList.remove("is-map-collection");
 
   memoryTitle.innerHTML = `
-    <button class="explore-back-button" type="button" aria-label="Back to Dublin collections">←</button>
+    <button class="explore-back-button" type="button" aria-label="Back to country collections">←</button>
   `;
   memorySubtitle.textContent = "";
 
@@ -586,11 +831,30 @@ function renderExploreCollectionList(collectionId) {
   nowPlayingText.textContent = `Viewing ${collection ? collection.name : "collection"}.`;
   renderExploreCapsuleRows(memories);
 
+  requestAnimationFrame(function() {
+    if (appContent) {
+      appContent.scrollTo({
+        top: 0,
+        behavior: "auto"
+      });
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: "auto"
+    });
+  });
+
   const backButton = memoryTitle.querySelector(".explore-back-button");
 
   if (backButton) {
     backButton.addEventListener("click", function() {
-      renderExploreMemories();
+      if (currentExploreView.countryId) {
+        renderExploreCountry(currentExploreView.countryId);
+        return;
+      }
+
+      renderExploreWorld();
     });
   }
 }
@@ -617,32 +881,43 @@ function setupExploreSearch() {
       return;
     }
 
-    const filteredCollections = exploreCollections.filter(function(collection) {
-      return getCollectionSearchText(collection).includes(query);
+    if (currentExploreView.level === "country") {
+      const country = getExploreCountryById(currentExploreView.countryId);
+      const collectionIds = country ? country.collectionIds || [] : [];
+
+      const filteredCollections = collectionIds
+        .map(getExploreCollectionById)
+        .filter(Boolean)
+        .filter(function(collection) {
+          return getCollectionSearchText(collection).includes(query);
+        });
+
+      renderExploreCollections(filteredCollections);
+      return;
+    }
+
+    const filteredCountries = exploreArchive.countries.filter(function(country) {
+      return [
+        country.name,
+        country.summary
+      ].filter(Boolean).join(" ").toLowerCase().includes(query);
     });
 
-    renderExploreCollections(filteredCollections);
+    renderExploreCountryCards(filteredCountries);
   });
 }
 
 function renderExploreMemories() {
-  memorySection.classList.add("is-explore-landing");
-  memorySection.classList.remove("is-explore-list");
-  memorySection.classList.remove("is-map-collection");
-
-  setExplorePageHeading();
-  renderExploreCityMap();
   setupExploreSearch();
 
   const searchInput = document.getElementById("explore-search");
 
   if (searchInput) {
     searchInput.value = "";
-    searchInput.placeholder = "Search places, collections, sounds...";
+    searchInput.placeholder = "Search countries, places, collections, sounds...";
   }
 
-  nowPlayingText.textContent = "Browse Dublin collections and sound capsules.";
-  renderExploreCollections(exploreCollections);
+  renderExploreWorld();
 }
 
 function scrollMainContentToCards() {

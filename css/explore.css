@@ -9,7 +9,7 @@
 }
 
 .explore-heading {
-  margin: 0 0 28px;
+  margin: 0 0 18px;
 }
 
 .explore-heading h2 {
@@ -20,7 +20,7 @@
 }
 
 .explore-city-hero {
-  position: static;
+  position: relative;
   width: auto;
   min-height: 0;
   margin: 0 0 28px;
@@ -147,10 +147,10 @@
 
 .explore-toolbar {
   display: grid;
-  grid-template-columns: minmax(260px, 720px) auto;
+  grid-template-columns: minmax(260px, 720px);
   gap: 12px;
   align-items: center;
-  max-width: 900px;
+  max-width: 720px;
   margin: 0;
 }
 
@@ -208,6 +208,7 @@
 }
 
 .explore-filter-button {
+  display: none;
   min-height: 42px;
   padding: 0 16px;
   border: 1px solid rgba(196, 122, 79, 0.22);
@@ -279,6 +280,10 @@
 
 .explore-collection-card[data-theme="transport"] .explore-collection-visual img {
   object-position: center 68%;
+}
+
+.explore-collection-card[data-archive-id="netherlands"] .explore-collection-visual img {
+  object-position: center 35%;
 }
 
 .explore-collection-visual::after {

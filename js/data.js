@@ -122,8 +122,74 @@ const exploreCollections = [
     name: "Voices & Spaces",
     theme: "voices",
     keywords: ["voices", "spaces", "conversation", "memory"]
+  },
+  {
+    id: "netherlandsParks",
+    name: "Parks & Gardens",
+    theme: "parks",
+    keywords: ["parks", "gardens", "nature", "trees", "calm", "netherlands", "north holland"]
+  },
+  {
+    id: "netherlandsStreets",
+    name: "Streets",
+    theme: "streets",
+    keywords: ["streets", "city", "town", "pedestrians", "netherlands", "north holland"]
+  },
+  {
+    id: "netherlandsTransport",
+    name: "Transport",
+    theme: "transport",
+    keywords: ["transport", "train", "tram", "station", "cycling", "netherlands", "north holland"]
+  },
+  {
+    id: "netherlandsWeather",
+    name: "Weather",
+    theme: "weather",
+    keywords: ["weather", "rain", "wind", "atmosphere", "netherlands", "north holland"]
+  },
+  {
+    id: "netherlandsVoices",
+    name: "Voices & Spaces",
+    theme: "voices",
+    keywords: ["voices", "spaces", "conversation", "public space", "netherlands", "north holland"]
   }
 ];
+
+const exploreArchive = {
+  countries: [
+    {
+      id: "ireland",
+      name: "Ireland",
+      type: "country",
+      theme: "parks",
+      image: "assets/images/countries/ireland_thumbnail.png",
+      summary: "Field recordings from parks, streets, transport, weather and everyday public spaces across Ireland.",
+      collectionIds: [
+        "dublinParks",
+        "dublinStreets",
+        "dublinTransport",
+        "dublinCoastal",
+        "dublinWeather",
+        "dublinVoices"
+      ]
+    },
+    {
+      id: "netherlands",
+      name: "Netherlands",
+      type: "country",
+      theme: "coastal",
+      image: "assets/images/countries/netherlands_thumbnail.png",
+      summary: "Recordings from parks, streets, waterways and everyday spaces across the Netherlands.",
+      collectionIds: [
+        "netherlandsParks",
+        "netherlandsStreets",
+        "netherlandsTransport",
+        "netherlandsWeather",
+        "netherlandsVoices"
+      ]
+    }
+  ]
+};
 
 // These are the memory/audio cards for each Dublin collection.
 const collectionMemories = {
@@ -372,5 +438,152 @@ const collectionMemories = {
       hiddenSoundTags: ["voices", "spaces", "memory"],
       hiddenMoodTags: []
     }
-  ]
+  ],
+
+  netherlandsParks: [
+    {
+      title: "Sunday Afternoon in Vondelpark",
+      location: "Vondelpark",
+      country: "Netherlands",
+      region: "North Holland",
+      city: "Amsterdam",
+      cityCountry: "Amsterdam, Netherlands",
+      lat: 52.360126,
+      lng: 4.873646,
+      mapZoom: 17,
+      description: "A Sunday afternoon in Vondelpark, Amsterdam's historic green retreat since 1865. Layers of birdsong fill the air as ducks splash in the water and distant conversations drift through the park. A gentle portrait of nature and everyday life in the heart of the city.",
+      image: "",
+      audio: "audio/Netherlands/Parks & Gardens/vondelpark.mp3",
+      duration: "08:08",
+      recordedDate: "OCT 2026",
+      signatureSound: {
+        label: "Birdsong",
+        icon: "birds",
+        story: "Birdsong gives this capsule its character, blending with ducks, water movement and distant conversations to create a lively but peaceful park atmosphere."
+      },
+      publicTags: ["parks", "birdsong", "ducks"],
+      hiddenSoundTags: ["birdsong", "water splashing", "ducks", "distant conversations", "urban park", "waterfowl"],
+      hiddenMoodTags: ["peaceful", "lively", "relaxing", "natural", "serene"]
+    },
+    {
+      title: "The Sounds of Noordsterpark",
+      location: "Noordsterpark",
+      country: "Netherlands",
+      region: "North Holland",
+      city: "Wormerveer",
+      cityCountry: "Wormerveer, Netherlands",
+      lat: 52.500884,
+      lng: 4.781957,
+      mapZoom: 17,
+      description: "Tucked into the residential neighbourhood of Wormerveer Noord, Noordsterpark offers a quiet green escape from everyday life. Birdsong and wind moving through the trees blend with the occasional sounds of people passing by, capturing the gentle rhythm of a small Dutch neighbourhood park.",
+      image: "",
+      audio: "audio/Netherlands/Parks & Gardens/the_sounds_of_noordsterpark.mp3",
+      duration: "08:50",
+      recordedDate: "OCT 2026",
+      publicTags: ["parks", "birds", "wind", "Wormerveer"],
+      hiddenSoundTags: ["birdsong", "wind", "rustling leaves", "distant footsteps", "passing pedestrians", "urban park", "ambience"],
+      hiddenMoodTags: ["peaceful", "calm", "relaxing", "tranquil", "everyday life"]
+    }
+  ],
+
+  netherlandsStreets: [
+    {
+      title: "Along the Zaan River",
+      location: "Zaan River, Westzijde",
+      country: "Netherlands",
+      region: "North Holland",
+      city: "Zaandam",
+      cityCountry: "Zaandam, Netherlands",
+      lat: 52.441376,
+      lng: 4.823486,
+      mapZoom: 17,
+      description: "A quiet weekend along the Zaan River in Zaandam. Birdsong and rustling leaves blend with distant traffic and occasional passing voices. A curious fly briefly buzzes close to the microphone, adding a small, unexpected detail to this peaceful riverside soundscape.",
+      image: "",
+      audio: "audio/Netherlands/Streets/along_the_zaan_river.mp3",
+      duration: "06:04",
+      recordedDate: "OCT 2026",
+      signatureSound: {
+        label: "Birdsong",
+        icon: "birds",
+        story: "Birdsong is the clearest presence in this riverside capsule, weaving through leaves, distant traffic and quiet weekend voices along the Zaan."
+      },
+      publicTags: ["riverside", "birds", "wind", "Zaandam"],
+      hiddenSoundTags: ["birdsong", "rustling leaves", "wind", "insect buzzing", "distant traffic", "distant conversations", "riverside ambience"],
+      hiddenMoodTags: ["peaceful", "calm", "tranquil", "reflective"]
+    },
+    {
+      title: "Along the Waterway to Jisp",
+      location: "Weiver",
+      country: "Netherlands",
+      region: "North Holland",
+      city: "Wormer",
+      cityCountry: "Wormer, Netherlands",
+      lat: 52.502198,
+      lng: 4.847229,
+      mapZoom: 17,
+      description: "Between the villages of Wormer and Jisp, quiet roads follow the waterways that have shaped North Holland's landscape for centuries. Wind moves through the wild riverside vegetation, blending with gentle water sounds and the occasional passing car. A peaceful glimpse of everyday life in the Dutch countryside.",
+      image: "",
+      audio: "audio/Netherlands/Streets/along_the_waterway_to_jisp.mp3",
+      duration: "04:38",
+      recordedDate: "OCT 2026",
+      signatureSound: {
+        label: "Wind",
+        icon: "wind",
+        story: "Wind shapes the recording, moving through riverside vegetation and blending with water movement and the occasional passing car."
+      },
+      publicTags: ["waterway", "wind", "countryside", "Wormer"],
+      hiddenSoundTags: ["wind", "rustling vegetation", "water movement", "distant traffic", "passing cars", "riverside", "ambience"],
+      hiddenMoodTags: ["peaceful", "calm", "tranquil", "rural", "reflective"]
+    },
+    {
+      title: "A Quiet Corner of Jisp",
+      location: "Molenpad",
+      country: "Netherlands",
+      region: "North Holland",
+      city: "Jisp",
+      cityCountry: "Jisp, Netherlands",
+      lat: 52.508042,
+      lng: 4.847384,
+      mapZoom: 17,
+      description: "In the storybook village of Jisp, narrow waterways and little bridges lead to charming houses, creating a landscape seemingly untouched by time. Along a quiet corner of Molenpad, wind rustles through the riverside vegetation as occasional birdsong and distant traffic gently interrupt the stillness.",
+      image: "",
+      audio: "audio/Netherlands/Streets/a_quiet_corner_of_jisp.mp3",
+      duration: "03:00",
+      recordedDate: "OCT 2026",
+      publicTags: ["village", "wind", "waterways", "Jisp"],
+      hiddenSoundTags: ["wind", "rustling vegetation", "distant traffic", "passing cars", "bird calls", "riverside", "ambience"],
+      hiddenMoodTags: ["peaceful", "serene", "quiet", "tranquil", "rural"]
+    }
+  ],
+
+  netherlandsTransport: [],
+
+  netherlandsWeather: [
+    {
+      title: "Wind Through the Reeds",
+      location: "Speelplaats Talingstraat - Sternstraat",
+      country: "Netherlands",
+      region: "North Holland",
+      city: "Wormer",
+      cityCountry: "Wormer, Netherlands",
+      lat: 52.501495,
+      lng: 4.811370,
+      mapZoom: 17,
+      description: "In the small town of Wormer, where waterways and green landscapes have long shaped everyday life, a quiet riverside offers a moment of stillness. Wind rustles through the wild vegetation as distant crows occasionally break the silence, capturing the peaceful rhythm of North Holland's countryside.",
+      image: "",
+      audio: "audio/Netherlands/Weather/wind_through_the_reeds.mp3",
+      duration: "07:22",
+      recordedDate: "OCT 2026",
+      signatureSound: {
+        label: "Wind",
+        icon: "wind",
+        story: "Wind is the main movement in this capsule, rustling through wild riverside vegetation and carrying the quiet atmosphere of the North Holland countryside."
+      },
+      publicTags: ["riverside", "wind", "vegetation", "Wormer"],
+      hiddenSoundTags: ["wind", "rustling vegetation", "distant crows", "bird calls", "riverside ambience"],
+      hiddenMoodTags: ["peaceful", "quiet", "tranquil", "serene", "isolated"]
+    }
+  ],
+
+  netherlandsVoices: []
 };

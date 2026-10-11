@@ -145,17 +145,17 @@
   }
 
   .explore-city-map {
-    top: -18px;
+    top: -61px;
     left: -80px;
     width: calc(100vw + 80px);
-    height: 500px;
+    height: 518px;
   }
 
   .explore-city-gradient {
-    top: -18px;
+    top: -61px;
     left: -80px;
     width: calc(100vw + 80px);
-    height: 560px;
+    height: 578px;
   }
 
   .explore-city-content {
