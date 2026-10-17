@@ -3,11 +3,14 @@
 const CARTO_BASEMAP_KEY = "cb1_2izv_1_a25afdd318a119b391971bf2";
 
 function getCartoBasemapUrl(styleName) {
-  const keyParam = CARTO_BASEMAP_KEY
-    ? `?key=${encodeURIComponent(CARTO_BASEMAP_KEY)}`
-    : "";
+  const params = new URLSearchParams();
+  params.set("v", "2");
 
-  return `https://{s}.basemaps.cartocdn.com/${styleName}/{z}/{x}/{y}{r}.png${keyParam}`;
+  if (CARTO_BASEMAP_KEY) {
+    params.set("key", CARTO_BASEMAP_KEY);
+  }
+
+  return `https://{s}.basemaps.cartocdn.com/${styleName}/{z}/{x}/{y}{r}.png?${params.toString()}`;
 }
 
 const mapViews = {
@@ -86,71 +89,77 @@ const exploreCollections = [
     id: "dublinParks",
     name: "Parks & Gardens",
     theme: "parks",
-    image: "assets/images/collections/dublin-parks.jpg",
+    image: "assets/images/collections/ireland/ireland_parks.jpg",
     keywords: ["parks", "gardens", "birds", "nature", "calm"]
   },
   {
     id: "dublinStreets",
     name: "Streets",
     theme: "streets",
-    image: "assets/images/collections/dublin-streets.jpg",
+    image: "assets/images/collections/ireland/ireland_streets.jpg",
     keywords: ["streets", "city", "crowd", "voices", "pedestrians"]
   },
   {
     id: "dublinTransport",
     name: "Transport",
     theme: "transport",
-    image: "assets/images/collections/dublin-transport.jpg",
+    image: "assets/images/collections/ireland/ireland_transport.jpg",
     keywords: ["transport", "luas", "train", "tram", "station"]
   },
   {
     id: "dublinCoastal",
     name: "Coastal & Water",
     theme: "coastal",
-    image: "assets/images/collections/dublin-coastal.jpg",
+    image: "assets/images/collections/ireland/ireland_coastal.jpg",
     keywords: ["coastal", "water", "wind", "sea"]
   },
   {
     id: "dublinWeather",
     name: "Weather",
     theme: "weather",
-    image: "assets/images/collections/dublin-weather.jpg",
+    image: "assets/images/collections/ireland/ireland_weather.jpg",
     keywords: ["weather", "rain", "wind", "atmosphere"]
   },
   {
     id: "dublinVoices",
     name: "Voices & Spaces",
     theme: "voices",
+    image: "assets/images/collections/ireland/ireland_voices.jpg",
     keywords: ["voices", "spaces", "conversation", "memory"]
   },
   {
     id: "netherlandsParks",
     name: "Parks & Gardens",
     theme: "parks",
+    image: "assets/images/collections/netherlands/netherlands_parks.jpg",
     keywords: ["parks", "gardens", "nature", "trees", "calm", "netherlands", "north holland"]
   },
   {
     id: "netherlandsStreets",
     name: "Streets",
     theme: "streets",
+    image: "assets/images/collections/netherlands/netherlands_streets.jpg",
     keywords: ["streets", "city", "town", "pedestrians", "netherlands", "north holland"]
   },
   {
     id: "netherlandsTransport",
     name: "Transport",
     theme: "transport",
+    image: "assets/images/collections/netherlands/netherlands_transport.jpg",
     keywords: ["transport", "train", "tram", "station", "cycling", "netherlands", "north holland"]
   },
   {
     id: "netherlandsWeather",
     name: "Weather",
     theme: "weather",
+    image: "assets/images/collections/netherlands/netherlands_weather.jpg",
     keywords: ["weather", "rain", "wind", "atmosphere", "netherlands", "north holland"]
   },
   {
     id: "netherlandsVoices",
     name: "Voices & Spaces",
     theme: "voices",
+    image: "assets/images/collections/netherlands/netherlands_voices.jpg",
     keywords: ["voices", "spaces", "conversation", "public space", "netherlands", "north holland"]
   }
 ];

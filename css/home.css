@@ -11,7 +11,7 @@
 }
 
 .home-hero {
-  --home-hero-image: url("../assets/images/collections/dublin-weather.jpg");
+  --home-hero-image: url("../assets/images/collections/ireland/ireland_weather.jpg");
 
   position: relative;
   min-height: 520px;
@@ -234,19 +234,19 @@
 }
 
 .home-collection-card:nth-child(1) {
-  --home-card-image: url("../assets/images/collections/dublin-parks.jpg");
+  --home-card-image: url("../assets/images/collections/ireland/ireland_parks.jpg");
 }
 
 .home-collection-card:nth-child(2) {
-  --home-card-image: url("../assets/images/collections/dublin-streets.jpg");
+  --home-card-image: url("../assets/images/collections/ireland/ireland_streets.jpg");
 }
 
 .home-collection-card:nth-child(3) {
-  --home-card-image: url("../assets/images/collections/dublin-transport.jpg");
+  --home-card-image: url("../assets/images/collections/ireland/ireland_transport.jpg");
 }
 
 .home-collection-card:nth-child(4) {
-  --home-card-image: url("../assets/images/collections/dublin-coastal.jpg");
+  --home-card-image: url("../assets/images/collections/ireland/ireland_coastal.jpg");
 }
 
 .home-preservation {
