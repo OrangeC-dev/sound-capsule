@@ -596,3 +596,44 @@ const collectionMemories = {
 
   netherlandsVoices: []
 };
+
+const globalCollections = [
+  {
+    id: "globalParks",
+    name: "Parks & Gardens",
+    theme: "parks",
+    type: "global"
+  },
+  {
+    id: "globalStreets",
+    name: "Streets",
+    theme: "streets",
+    type: "global"
+  },
+  {
+    id: "globalTransport",
+    name: "Transport",
+    theme: "transport",
+    type: "global"
+  },
+  {
+    id: "globalCoastal",
+    name: "Coastal & Water",
+    theme: "coastal",
+    type: "global"
+  },
+  {
+    id: "globalWeather",
+    name: "Weather",
+    theme: "weather",
+    type: "global"
+  },
+  {
+    id: "globalVoices",
+    name: "Voices & Spaces",
+    theme: "voices",
+    type: "global"
+  }
+];
+
+const editorialCollections = [];

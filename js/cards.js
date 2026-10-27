@@ -144,6 +144,10 @@ function renderExploreCityMap(contextId) {
 }
 
 function createMemoryId(memory) {
+  if (memory.id) {
+    return memory.id;
+  }
+
   return `${memory.title}-${memory.audio || memory.location}`.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 }
 
@@ -309,13 +313,55 @@ let currentExploreView = {
 };
 
 function getCollectionCapsuleCount(collectionId) {
-  return (collectionMemories[collectionId] || []).length;
+  return getCollectionMemories(collectionId).length;
 }
 
 function getExploreCollectionById(collectionId) {
-  return exploreCollections.find(function(collection) {
+  return [...exploreCollections, ...globalCollections, ...editorialCollections].find(function(collection) {
     return collection.id === collectionId;
   });
+}
+
+function getCollectionMemories(collectionId) {
+  const collection = getExploreCollectionById(collectionId);
+
+  if (collection && collection.type === "global") {
+    const memories = exploreCollections
+      .filter(function(source) {
+        return source.theme === collection.theme;
+      })
+      .flatMap(function(source) {
+        return collectionMemories[source.id] || [];
+      });
+    const seen = new Set();
+
+    return memories.filter(function(memory) {
+      const id = createMemoryId(memory);
+
+      if (seen.has(id)) {
+        return false;
+      }
+
+      seen.add(id);
+      return true;
+    });
+  }
+
+  if (collection && collection.type === "editorial") {
+    const memoriesById = new Map();
+
+    Object.values(collectionMemories).flat().forEach(function(memory) {
+      memoriesById.set(createMemoryId(memory), memory);
+    });
+
+    return [...new Set(collection.capsuleIds || [])]
+      .map(function(id) {
+        return memoriesById.get(id);
+      })
+      .filter(Boolean);
+  }
+
+  return collectionMemories[collectionId] || [];
 }
 
 function getExploreCountryById(countryId) {
@@ -339,7 +385,7 @@ function getExploreCountryCapsuleCount(country) {
 }
 
 function getCollectionSearchText(collection) {
-  const memories = collectionMemories[collection.id] || [];
+  const memories = getCollectionMemories(collection.id);
   const memoryText = memories.map(getMemorySearchText).join(" ");
 
   return [
@@ -589,6 +635,7 @@ function renderExploreWorld() {
   }
 
   renderExploreCountryCards(exploreArchive.countries);
+  renderRecentlyAddedCapsule();
 
   nowPlayingText.textContent = "Choose a country to explore its sound capsules.";
 }
@@ -792,69 +839,71 @@ function renderExploreCapsuleRows(memories) {
 
 function renderExploreCollectionList(collectionId) {
   const collection = getExploreCollectionById(collectionId);
-  const memories = collectionMemories[collectionId] || [];
-  const searchInput = document.getElementById("explore-search");
-  const collectionsHeader = document.querySelector(".explore-collections-header h3");
 
+  if (!collection) {
+    return;
+  }
+
+  const isSharedCollection = collection.type === "global" || collection.type === "editorial";
+  const country = exploreArchive.countries.find(function(item) {
+    return (item.collectionIds || []).includes(collectionId);
+  });
+
+  setAppSection("explore");
+  setupExploreSearch();
   currentExploreCollectionId = collectionId;
-  currentAppSection = "explore";
+  currentExploreView = {
+    level: isSharedCollection ? "global" : "country",
+    countryId: country ? country.id : "",
+    placeId: ""
+  };
 
-  homeView.hidden = true;
-  mapSection.hidden = true;
-  memorySection.hidden = false;
-  savedView.hidden = true;
-  profileView.hidden = true;
-  capsuleView.hidden = true;
-  document.body.classList.remove("has-capsule-view");
-  exploreFilterRow.hidden = false;
-
-  memorySection.classList.remove("is-explore-landing");
-  memorySection.classList.remove("is-explore-world");
-  memorySection.classList.remove("is-explore-country");
+  memorySection.classList.remove(
+    "is-explore-landing",
+    "is-explore-world",
+    "is-explore-country",
+    "is-map-collection"
+  );
   memorySection.classList.add("is-explore-list");
-  memorySection.classList.remove("is-map-collection");
 
   memoryTitle.innerHTML = `
-    <button class="explore-back-button" type="button" aria-label="Back to country collections">←</button>
+    <button class="explore-back-button" type="button" aria-label="${isSharedCollection ? "Back to Ways to Listen" : "Back to country collections"}">←</button>
+    ${isSharedCollection ? `<span>${escapeAttribute(collection.name)}</span>` : ""}
   `;
   memorySubtitle.textContent = "";
+
+  const collectionsHeader = document.querySelector(".explore-collections-header h3");
 
   if (collectionsHeader) {
     collectionsHeader.textContent = "";
   }
+
+  const searchInput = document.getElementById("explore-search");
 
   if (searchInput) {
     searchInput.value = "";
     searchInput.placeholder = "Search within this collection...";
   }
 
-  nowPlayingText.textContent = `Viewing ${collection ? collection.name : "collection"}.`;
-  renderExploreCapsuleRows(memories);
+  nowPlayingText.textContent = `Viewing ${collection.name}.`;
+  renderExploreCapsuleRows(getCollectionMemories(collectionId));
 
   requestAnimationFrame(function() {
-    if (appContent) {
-      appContent.scrollTo({
-        top: 0,
-        behavior: "auto"
-      });
-    }
-
-    window.scrollTo({
-      top: 0,
-      behavior: "auto"
-    });
+    appContent.scrollTo({ top: 0, behavior: "auto" });
+    window.scrollTo({ top: 0, behavior: "auto" });
   });
 
   const backButton = memoryTitle.querySelector(".explore-back-button");
 
   if (backButton) {
     backButton.addEventListener("click", function() {
-      if (currentExploreView.countryId) {
-        renderExploreCountry(currentExploreView.countryId);
-        return;
+      if (isSharedCollection) {
+        setAppSection("home");
+      } else if (country) {
+        renderExploreCountry(country.id);
+      } else {
+        renderExploreWorld();
       }
-
-      renderExploreWorld();
     });
   }
 }
@@ -872,7 +921,7 @@ function setupExploreSearch() {
     const query = searchInput.value.trim().toLowerCase();
 
     if (currentExploreCollectionId) {
-      const memories = collectionMemories[currentExploreCollectionId] || [];
+      const memories = getCollectionMemories(currentExploreCollectionId);
       const filteredMemories = memories.filter(function(memory) {
         return getMemorySearchText(memory).includes(query);
       });
@@ -951,4 +1000,166 @@ function renderCollection(collectionId, collectionTitle) {
   }
 
   scrollMainContentToCards();
+}
+
+function getRecentlyAddedMemories(limit = 5) {
+  if (typeof audioAddedAt === "undefined") {
+    return [];
+  }
+
+  const memoriesById = new Map();
+
+  Object.entries(collectionMemories).forEach(function([collectionId, memories]) {
+    const collection = getExploreCollectionById(collectionId);
+
+    memories.forEach(function(memory) {
+      const addedAt = audioAddedAt[memory.audio];
+
+      if (!memory.audio || memory.duration === "Coming soon" || !Number.isFinite(Date.parse(addedAt))) {
+        return;
+      }
+
+      const id = createMemoryId(memory);
+
+      if (!memoriesById.has(id)) {
+        memoriesById.set(id, {
+          ...addCollectionContext(memory, collectionId, collection ? collection.name : ""),
+          addedAt: addedAt
+        });
+      }
+    });
+  });
+
+  return [...memoriesById.values()]
+    .sort(function(a, b) {
+      return Date.parse(b.addedAt) - Date.parse(a.addedAt) || a.audio.localeCompare(b.audio);
+    })
+    .slice(0, limit);
+}
+
+let archiveCapsuleMaps = [];
+let archiveMapObserver = null;
+
+function createArchiveCapsuleCard(memory) {
+  const card = document.createElement("article");
+  const memoryId = createMemoryId(memory);
+  const placeParts = (memory.cityCountry || "").split(",").map(function(part) {
+    return part.trim();
+  });
+  const city = memory.city || memory.town || placeParts[0] || "";
+  const country = memory.country || (placeParts.length > 1 ? placeParts.slice(1).join(", ") : "");
+
+  memoryStore.set(memoryId, memory);
+  card.className = "archive-capsule-card";
+  card.dataset.memoryId = memoryId;
+
+  card.innerHTML = `
+    <button class="archive-capsule-open" type="button" aria-label="Open ${escapeAttribute(memory.title)}"></button>
+
+    <div class="archive-capsule-visual">
+      <div class="player-map-thumb archive-capsule-map" aria-hidden="true" style="z-index: 0; pointer-events: none;"></div>
+      ${createExplorePlayButton(memory, memoryId)}
+    </div>
+
+    <div class="archive-capsule-copy">
+      <h4>${escapeAttribute(memory.title)}</h4>
+      <p>${escapeAttribute(city)}${city && country ? "<br>" : ""}${escapeAttribute(country)}</p>
+    </div>
+  `;
+
+  const playButton = card.querySelector(".play-button");
+  playButton.classList.remove("explore-row-play");
+  playButton.classList.add("archive-capsule-play");
+  playButton.addEventListener("click", function(event) {
+    event.stopPropagation();
+  });
+
+  card.querySelector(".archive-capsule-open").addEventListener("click", function() {
+    if (currentMemoryData && createMemoryId(currentMemoryData) === memoryId) {
+      openCapsuleView();
+      return;
+    }
+
+    openMemoryInCapsuleView(playButton);
+  });
+
+  return card;
+}
+
+function renderRecentlyAddedCapsule() {
+  const section = document.getElementById("explore-recently-added");
+  const container = document.getElementById("explore-recently-added-capsule");
+
+  if (!section || !container) {
+    return;
+  }
+
+  if (archiveMapObserver) {
+    archiveMapObserver.disconnect();
+  }
+  archiveMapObserver = null;
+  archiveCapsuleMaps.forEach(function(map) {
+    map.remove();
+  });
+  archiveCapsuleMaps = [];
+
+  const memories = getRecentlyAddedMemories();
+  container.innerHTML = "";
+  section.hidden = memories.length === 0;
+
+  if (!memories.length) {
+    return;
+  }
+
+  if (typeof ResizeObserver !== "undefined") {
+    archiveMapObserver = new ResizeObserver(function(entries) {
+      entries.forEach(function(entry) {
+        const mapScale = entry.target.querySelector(".player-map-thumb-scale");
+        const mapCanvas = entry.target.querySelector(".player-map-thumb-canvas");
+
+        if (!mapScale || !mapCanvas || !entry.contentRect.width || !entry.contentRect.height) {
+          return;
+        }
+
+        const scale = Math.max(
+          entry.contentRect.width / mapCanvas.offsetWidth,
+          entry.contentRect.height / mapCanvas.offsetHeight
+        ) * 1.02;
+
+        mapScale.style.setProperty("--thumb-scale", scale);
+      });
+    });
+  }
+
+  memories.forEach(function(memory) {
+    const card = createArchiveCapsuleCard(memory);
+    container.appendChild(card);
+
+    const mapContainer = card.querySelector(".archive-capsule-map");
+    const map = renderPlayerMapThumbnail(mapContainer, null, memory);
+
+    if (map) {
+      archiveCapsuleMaps.push(map);
+
+      if (archiveMapObserver) {
+        archiveMapObserver.observe(mapContainer);
+      }
+    }
+  });
+  container.scrollLeft = 0;
+  connectPlayButtons();
+
+  if (currentMemoryData) {
+    const currentId = createMemoryId(currentMemoryData);
+    const activeButton = Array.from(container.querySelectorAll(".play-button")).find(function(button) {
+      return button.dataset.memoryId === currentId;
+    });
+
+    if (activeButton) {
+      resetCardPlayer(currentButton);
+      currentButton = activeButton;
+      currentMemoryCard = null;
+      setPlayButtonState(activeButton, !persistentAudio.paused && !persistentAudio.ended);
+    }
+  }
 }

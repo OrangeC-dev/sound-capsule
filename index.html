@@ -133,27 +133,37 @@
           </section>
 
           <section class="home-collection-preview" aria-labelledby="home-collections-title">
-            <p class="eyebrow" id="home-collections-title">Discover Collections</p>
+            <p class="eyebrow" id="home-collections-title">Ways to Listen</p>
 
             <div class="home-collection-row">
-              <button class="home-collection-card" type="button" data-home-collection-id="dublinParks">
+              <button class="home-collection-card" type="button" data-home-collection-id="globalParks">
                 <span>Parks & Gardens</span>
-                <small>4 Capsules</small>
+                <small>0 Capsules</small>
               </button>
 
-              <button class="home-collection-card" type="button" data-home-collection-id="dublinStreets">
+              <button class="home-collection-card" type="button" data-home-collection-id="globalStreets">
                 <span>Streets</span>
-                <small>3 Capsules</small>
+                <small>0 Capsules</small>
               </button>
 
-              <button class="home-collection-card" type="button" data-home-collection-id="dublinTransport">
+              <button class="home-collection-card" type="button" data-home-collection-id="globalTransport">
                 <span>Transport</span>
-                <small>2 Capsules</small>
+                <small>0 Capsules</small>
               </button>
 
-              <button class="home-collection-card" type="button" data-home-collection-id="dublinCoastal">
+              <button class="home-collection-card" type="button" data-home-collection-id="globalCoastal">
                 <span>Coastal & Water</span>
-                <small>1 Capsule</small>
+                <small>0 Capsules</small>
+              </button>
+
+              <button class="home-collection-card" type="button" data-home-collection-id="globalWeather">
+                <span>Weather</span>
+                <small>0 Capsules</small>
+              </button>
+
+              <button class="home-collection-card" type="button" data-home-collection-id="globalVoices">
+                <span>Voices & Spaces</span>
+                <small>0 Capsules</small>
               </button>
             </div>
           </section>
@@ -219,6 +229,11 @@
           </div>
 
           <div class="capsule-grid explore-collection-grid" id="capsule-grid"></div>
+
+          <section class="explore-recently-added" id="explore-recently-added" aria-labelledby="explore-recently-added-title" hidden>
+            <h3 id="explore-recently-added-title">New in the Archive</h3>
+            <div class="explore-capsule-list" id="explore-recently-added-capsule"></div>
+          </section>
         </section>
 
         <section class="app-placeholder" id="saved-view" hidden>
@@ -397,6 +412,7 @@
 ></script>
 
 <script src="js/data.js"></script>
+<script src="js/audio-dates.js"></script>
 <script src="js/map.js"></script>
 <script src="js/cards.js"></script>
 <script src="js/player.js"></script>

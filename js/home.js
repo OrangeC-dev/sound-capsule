@@ -121,10 +121,48 @@ function setupHomeInteractions() {
     });
   }
 
-  document.querySelectorAll("[data-home-collection-id]").forEach(function(button) {
+  const collectionButtons = Array.from(
+    document.querySelectorAll("[data-home-collection-id]")
+  );
+  const shuffledButtons = [...collectionButtons];
+
+  for (let index = shuffledButtons.length - 1; index > 0; index--) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffledButtons[index], shuffledButtons[randomIndex]] =
+      [shuffledButtons[randomIndex], shuffledButtons[index]];
+  }
+
+  const visibleButtons = new Set(shuffledButtons.slice(0, 3));
+
+  collectionButtons.forEach(function(button) {
+    button.hidden = !visibleButtons.has(button);
+
+    const collectionId = button.dataset.homeCollectionId;
+    const collection = getExploreCollectionById(collectionId);
+    const count = getCollectionCapsuleCount(collectionId);
+    const countLabel = button.querySelector("small");
+    const thumbnailImages = [...new Set(
+      exploreCollections
+        .filter(function(source) {
+          return collection && source.theme === collection.theme && source.image;
+        })
+        .map(function(source) {
+          return source.image;
+        })
+    )];
+
+    if (thumbnailImages.length) {
+      const randomIndex = Math.floor(Math.random() * thumbnailImages.length);
+      const imageUrl = new URL(thumbnailImages[randomIndex], document.baseURI).href;
+      button.style.setProperty("--home-card-image", `url("${imageUrl}")`);
+    }
+
+    if (countLabel) {
+      countLabel.textContent = `${count} ${count === 1 ? "Capsule" : "Capsules"}`;
+    }
+
     button.addEventListener("click", function() {
-      setAppSection("explore");
-      renderExploreCollectionList(button.dataset.homeCollectionId);
+      renderExploreCollectionList(collectionId);
     });
   });
 }
