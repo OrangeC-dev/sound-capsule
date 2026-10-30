@@ -3,6 +3,8 @@ const audioAddedAt = {
   "audio/drury_street_summer_evening.mp3": "2026-05-30T21:18:27.849Z",
   "audio/garden_rain_ushers_quay.mp3": "2026-06-01T20:58:44.465Z",
   "audio/harcourt_street.mp3": "2026-06-09T19:38:47.719Z",
+  "audio/Ireland/bishop_lucey_park_cork.mp3": "2026-10-29T17:40:13.068Z",
+  "audio/Ireland/tralee_park.mp3": "2026-10-29T17:40:13.068Z",
   "audio/iveagh_gardens_park_waterfall.mp3": "2026-06-09T19:51:32.727Z",
   "audio/luas_redline_smithfield_stop.mp3": "2026-06-06T20:50:44.455Z",
   "audio/Netherlands/Parks & Gardens/the_sounds_of_noordsterpark.mp3": "2026-10-10T18:28:41.678Z",

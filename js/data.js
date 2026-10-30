@@ -323,6 +323,11 @@ const collectionMemories = {
       audio: "audio/iveagh_gardens_park_waterfall.mp3",
       duration: "9:01",
       recordedDate: "JUN 2026",
+      signatureSound: {
+        label: "Waterfall",
+        icon: "waterfall",
+        story: "Hidden behind the busy streets of central Dublin, just a short walk from St Stephen’s Green, Iveagh Gardens is one of the city's best-kept secrets. Known for its peaceful atmosphere, the historic gardens occasionally come alive with food festivals, music, and cultural events. Yet on quieter days, birdsong and rustling leaves fill the air, accompanied by the gentle, distant rush of the park's cascading waterfall. An unexpected pocket of tranquillity, where the sounds of nature offer a quiet escape from the city beyond its walls."
+      },
       publicTags: ["birds", "rustling leaves", "waterfall", "wind", "calm"],
       hiddenSoundTags: ["waterfall", "birds", "wind", "urban-nature"],
       hiddenMoodTags: ["calm", "peaceful", "warm", "reflective"]
@@ -347,6 +352,48 @@ const collectionMemories = {
       publicTags: ["parks", "church bells", "birds", "reflective"],
       hiddenSoundTags: ["birdsong", "church bells", "distant conversations", "urban park"],
       hiddenMoodTags: ["peaceful", "calm", "reflective", "historic", "relaxing", "mindful"]
+    },
+    {
+      title: "Summer Birdsong",
+      location: "Tralee Town Park",
+      cityCountry: "Tralee, Ireland",
+      lat: 52.267506,
+      lng: -9.703648,
+      mapZoom: 17,
+      description: "",
+      image: "",
+      audio: "audio/Ireland/tralee_park.mp3",
+      duration: "08:34",
+      recordedDate: "JUL 2026",
+      signatureSound: {
+        label: "Barn Swallow",
+        icon: "birds",
+        story: "In Tralee, a town near Ireland's Atlantic coast, summer marks the return of barn swallows after their remarkable migration from Africa. Known for their strong site fidelity, these birds often return to the same nesting grounds year after year. Among the greenery of Tralee Town Park, their distinctive calls blend with gentle wind, distant traffic, and passing conversations, preserving a fleeting summer soundscape shaped by nature's annual rhythms."
+      },
+      publicTags: ["parks", "birds", "barn swallows", "summer", "Tralee"],
+      hiddenSoundTags: ["barn swallow calls", "birdsong", "wind", "distant traffic", "passing conversations", "urban park ambience"],
+      hiddenMoodTags: ["peaceful", "lively", "warm", "natural", "summer"]
+    },
+    {
+      title: "City Life",
+      location: "Bishop Lucey Park",
+      cityCountry: "Cork, Ireland",
+      lat: 51.897257,
+      lng: -8.475756,
+      mapZoom: 17,
+      description: "",
+      image: "",
+      audio: "audio/Ireland/bishop_lucey_park_cork.mp3",
+      duration: "14:43",
+      recordedDate: "AUG 2026",
+      signatureSound: {
+        label: "Crow Calls",
+        icon: "birds",
+        story: "Nestled among the busy streets of Cork's city centre, Bishop Lucey Park has long offered a small green retreat where locals gather, rest, and enjoy the summer days. Conversations and distant traffic form the backdrop of everyday city life, while the unmistakable calls of crows echo through the park. These adaptable birds have become familiar inhabitants of urban spaces, thriving alongside human activity and adding their own distinctive voice to Cork's soundscape."
+      },
+      publicTags: ["parks", "crows", "summer", "cork", "birds"],
+      hiddenSoundTags: ["crow calls", "urban park ambience", "birdsong", "conversations", "distant traffic", "urban park", "city ambience"],
+      hiddenMoodTags: ["busy", "social", "urban", "lively", "natural"]
     },
   ],
 
@@ -468,7 +515,7 @@ const collectionMemories = {
       signatureSound: {
         label: "Birdsong",
         icon: "birds",
-        story: "Birdsong gives this capsule its character, blending with ducks, water movement and distant conversations to create a lively but peaceful park atmosphere."
+        story: "A Sunday afternoon in Vondelpark, Amsterdam's historic green retreat since 1865. Layers of birdsong fill the air as ducks splash in the water and distant conversations drift through the park. A gentle portrait of nature and everyday life in the heart of the city. Birdsong gives this capsule its character, blending with ducks, water movement and distant conversations to create a lively but peaceful park atmosphere."
       },
       publicTags: ["parks", "birdsong", "ducks"],
       hiddenSoundTags: ["birdsong", "water splashing", "ducks", "distant conversations", "urban park", "waterfowl"],
