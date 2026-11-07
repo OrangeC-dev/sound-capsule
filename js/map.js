@@ -84,32 +84,32 @@ const mapBounds = {
 const dublinCollectionPlaces = [
   {
     title: "Coastal",
-    collectionId: "dublinCoastal",
+    collectionId: "irelandCoastal",
     position: [53.3895, -6.0665]
   },
   {
     title: "Streets",
-    collectionId: "dublinStreets",
+    collectionId: "irelandStreets",
     position: [53.3445, -6.2750]
   },
   {
     title: "Parks",
-    collectionId: "dublinParks",
+    collectionId: "irelandParks",
     position: [53.3290, -6.3350]
   },
   {
     title: "Transport",
-    collectionId: "dublinTransport",
+    collectionId: "irelandTransport",
     position: [53.3533, -6.2380]
   },
   {
     title: "Weather",
-    collectionId: "dublinWeather",
+    collectionId: "irelandWeather",
     position: [53.3810, -6.1700]
   },
   {
     title: "Voices & Spaces",
-    collectionId: "dublinVoices",
+    collectionId: "irelandVoices",
     position: [53.3340, -6.2050]
   }
 ];
@@ -117,32 +117,32 @@ const dublinCollectionPlaces = [
 const mobileDublinCollectionPlaces = [
   {
     title: "Coastal",
-    collectionId: "dublinCoastal",
+    collectionId: "irelandCoastal",
     position: [53.3980, -6.1300]
   },
   {
     title: "Streets",
-    collectionId: "dublinStreets",
+    collectionId: "irelandStreets",
     position: [53.3570, -6.4250]
   },
   {
     title: "Parks",
-    collectionId: "dublinParks",
+    collectionId: "irelandParks",
     position: [53.3240, -6.3400]
   },
   {
     title: "Transport",
-    collectionId: "dublinTransport",
+    collectionId: "irelandTransport",
     position: [53.4240, -6.3100]
   },
   {
     title: "Weather",
-    collectionId: "dublinWeather",
+    collectionId: "irelandWeather",
     position: [53.3860, -6.2650]
   },
   {
     title: "Voices & Spaces",
-    collectionId: "dublinVoices",
+    collectionId: "irelandVoices",
     position: [53.2770, -6.2800]
   }
 ];

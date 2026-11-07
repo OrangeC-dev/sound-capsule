@@ -47,37 +47,37 @@ const mapViews = {
       {
         title: "Dublin Coastal",
         type: "collection",
-        collectionId: "dublinCoastal",
+        collectionId: "irelandCoastal",
         mapPosition: { x: "72%", y: "35%" }
       },
       {
         title: "Dublin Streets", 
         type: "collection",
-        collectionId: "dublinStreets",
+        collectionId: "irelandStreets",
         mapPosition: { x: "48%", y: "58%" }
       },
       {
         title: "Dublin Parks", 
         type: "collection",
-        collectionId: "dublinParks", 
+        collectionId: "irelandParks",
         mapPosition: { x: "38%", y: "48%" }
       },
       {
         title: "Dublin Transport",
         type: "collection",
-        collectionId: "dublinTransport",
+        collectionId: "irelandTransport",
         mapPosition: { x: "56%", y: "72%" }
       },
       {
         title: "Dublin Weather", 
         type: "collection",
-        collectionId: "dublinWeather",
+        collectionId: "irelandWeather",
         mapPosition: { x: "64%", y: "24%"}
       },
       {
         title: "Dublin Voices & Spaces",
         type: "collection",
-        collectionId: "dublinVoices",
+        collectionId: "irelandVoices",
         mapPosition: { x: "32%", y: "66%" }
       }
     ]
@@ -86,42 +86,42 @@ const mapViews = {
 
 const exploreCollections = [
   {
-    id: "dublinParks",
+    id: "irelandParks",
     name: "Parks & Gardens",
     theme: "parks",
     image: "assets/images/collections/ireland/ireland_parks.jpg",
     keywords: ["parks", "gardens", "birds", "nature", "calm"]
   },
   {
-    id: "dublinStreets",
+    id: "irelandStreets",
     name: "Streets",
     theme: "streets",
     image: "assets/images/collections/ireland/ireland_streets.jpg",
     keywords: ["streets", "city", "crowd", "voices", "pedestrians"]
   },
   {
-    id: "dublinTransport",
+    id: "irelandTransport",
     name: "Transport",
     theme: "transport",
     image: "assets/images/collections/ireland/ireland_transport.jpg",
     keywords: ["transport", "luas", "train", "tram", "station"]
   },
   {
-    id: "dublinCoastal",
+    id: "irelandCoastal",
     name: "Coastal & Water",
     theme: "coastal",
     image: "assets/images/collections/ireland/ireland_coastal.jpg",
     keywords: ["coastal", "water", "wind", "sea"]
   },
   {
-    id: "dublinWeather",
+    id: "irelandWeather",
     name: "Weather",
     theme: "weather",
     image: "assets/images/collections/ireland/ireland_weather.jpg",
     keywords: ["weather", "rain", "wind", "atmosphere"]
   },
   {
-    id: "dublinVoices",
+    id: "irelandVoices",
     name: "Voices & Spaces",
     theme: "voices",
     image: "assets/images/collections/ireland/ireland_voices.jpg",
@@ -174,12 +174,12 @@ const exploreArchive = {
       image: "assets/images/countries/ireland_thumbnail.png",
       summary: "Field recordings from parks, streets, transport, weather and everyday public spaces across Ireland.",
       collectionIds: [
-        "dublinParks",
-        "dublinStreets",
-        "dublinTransport",
-        "dublinCoastal",
-        "dublinWeather",
-        "dublinVoices"
+        "irelandParks",
+        "irelandStreets",
+        "irelandTransport",
+        "irelandCoastal",
+        "irelandWeather",
+        "irelandVoices"
       ]
     },
     {
@@ -200,9 +200,9 @@ const exploreArchive = {
   ]
 };
 
-// These are the memory/audio cards for each Dublin collection.
+// Capsule records grouped by collection ID.
 const collectionMemories = {
-  dublinCoastal: [
+  irelandCoastal: [
     {
       title: "Howth Wind",
       location: "Howth Cliffs, Dublin",
@@ -221,7 +221,7 @@ const collectionMemories = {
     }
   ],
 
-  dublinStreets: [
+  irelandStreets: [
     {
       title: "Afternoon Rush",
       location: "Capel Street",
@@ -231,7 +231,7 @@ const collectionMemories = {
       mapZoom: 17,
       description: "One of Dublin’s most vibrant pedestrian streets captured on a busy afternoon. Conversations spill across the pavement as cyclists pass by and seagulls circle overhead. A bustling portrait of everyday life in the city centre.",
       image: "",
-      audio: "audio/capel_street.mp3",
+      audio: "audio/Ireland/capel_street.mp3",
       duration: "9:54",
       recordedDate: "JUN 2026",
       publicTags: ["conversations", "cyclists", "footsteps", "seagulls", "busy"],
@@ -247,7 +247,7 @@ const collectionMemories = {
       mapZoom: 17,
       description: "A Dublin morning soundscape filled with movement. Seagulls and birds mix with passing bicycles, Luas trams, traffic signals, and the steady flow of pedestrians. A lively street awakening to the day ahead.",
       image: "",
-      audio: "audio/harcourt_street.mp3",
+      audio: "audio/Ireland/harcourt_street.mp3",
       duration: "10:14",
       recordedDate: "JUN 2026",
       publicTags: ["seagulls", "birds", "bicycles", "traffic signals", "pedestrians"],
@@ -264,7 +264,7 @@ const collectionMemories = {
       description: "A warm summer evening on one of Dublin’s liveliest streets. Conversations drift through the air as friends gather outdoors and pedestrians move between busy cafés and restaurants. A snapshot of Dublin’s social life at its most vibrant.",
       quote: "Where conversations, laughter and city life spill onto the streets.",
       image: "",
-      audio: "audio/drury_street_summer_evening.mp3",
+      audio: "audio/Ireland/drury_street_summer_evening.mp3",
       duration: "2:27",
       recordedDate: "MAY 2026",
       signatureSound: {
@@ -278,7 +278,7 @@ const collectionMemories = {
     }
   ],
 
-  dublinParks: [
+  irelandParks: [
     {
       title: "Quiet Corner Behind Trinity",
       location: "Trinity College",
@@ -288,7 +288,7 @@ const collectionMemories = {
       mapZoom: 15,
       description: "Tucked away behind Trinity College, this recording captures a quieter side of the city. Birds dominate the soundscape while distant traffic, passing pedestrians, and occasional emergency sirens drift in from beyond the park. A gentle blend of nature and urban life at the heart of Dublin.",
       image: "",
-      audio: "audio/trinity_college_park_back.mp3",
+      audio: "audio/Ireland/trinity_college_park_back.mp3",
       duration: "11:13",
       recordedDate: "MAY 2026",
       publicTags: ["birds", "distant traffic", "wind"],
@@ -304,7 +304,7 @@ const collectionMemories = {
       mapZoom: 17,
       description: "A peaceful afternoon in one of Dublin's most historic city parks, with birdsong, passing footsteps, and distant conversations creating a relaxing urban atmosphere.",
       image: "",
-      audio: "audio/st_patricks_park.mp3",
+      audio: "audio/Ireland/st_patricks_park.mp3",
       duration: "5:39",
       recordedDate: "JUN 2026",
       publicTags: ["birds", "footsteps", "distant conversations", "city-park"],
@@ -320,7 +320,7 @@ const collectionMemories = {
       mapZoom: 17,
       description: "Recorded among the trees of Iveagh Gardens, this soundscape layers birdsong, rustling leaves, and a distant waterfall beneath the city’s constant presence. Wind moves through the garden while urban sounds linger softly in the background, creating a peaceful balance between nature and city life.",
       image: "assets/images/iveagh-gardens-waterfall.jpg",
-      audio: "audio/iveagh_gardens_park_waterfall.mp3",
+      audio: "audio/Ireland/iveagh_gardens_park_waterfall.mp3",
       duration: "9:01",
       recordedDate: "JUN 2026",
       signatureSound: {
@@ -341,7 +341,7 @@ const collectionMemories = {
       mapZoom: 17,
       description: "A peaceful Sunday morning in St Patrick’s Park. Birdsong, distant conversations, and gentle city sounds surround the gardens as the bells of St Patrick’s Cathedral ring across the park, creating one of Dublin’s most distinctive weekly soundscapes.",
       image: "",
-      audio: "audio/st_patricks_park_sunday_bells.mp3",
+      audio: "audio/Ireland/st_patricks_park_sunday_bells.mp3",
       duration: "12:36",
       recordedDate: "JUL 2026",
       signatureSound: {
@@ -397,7 +397,7 @@ const collectionMemories = {
     },
   ],
 
-  dublinTransport: [
+  irelandTransport: [
     {
       title: "Red Line Luas Stop",
       location: "Smithfield",
@@ -407,7 +407,7 @@ const collectionMemories = {
       mapZoom: 17,
       description: "A typical moment at one of Dublin’s busiest tram stops. Seagulls call overhead as passengers chat, tickets are tapped, and Luas trams arrive and depart throughout the recording. An everyday snapshot of the city’s rhythm in motion.",
       image: "",
-      audio: "audio/luas_redline_smithfield_stop.mp3",
+      audio: "audio/Ireland/luas_redline_smithfield_stop.mp3",
       duration: "9:59",
       recordedDate: "JUN 2026",
       signatureSound: {
@@ -428,7 +428,7 @@ const collectionMemories = {
       mapZoom: 17,
       description: "The sounds of daily travel unfold inside one of Dublin’s busiest rail stations. Ticket gates beep, footsteps echo through the concourse, and trains arrive and depart as commuters move through the space.",
       image: "",
-      audio: "audio/pearse_station.mp3",
+      audio: "audio/Ireland/pearse_station.mp3",
       duration: "3:15",
       recordedDate: "JUN 2026",
       publicTags: ["ticket gates", "footsteps", "train", "commuters"],
@@ -437,11 +437,11 @@ const collectionMemories = {
     }
   ],
 
-  dublinWeather: [
+  irelandWeather: [
     {
       title: "Rain On Pavement",
-      location: "Dublin Weather",
-      cityCountry: "Dublin, Ireland",
+      location: "Ireland Weather",
+      cityCountry: "Ireland",
       lat: 53.3498,
       lng: -6.2603,
       mapZoom: 14,
@@ -463,7 +463,7 @@ const collectionMemories = {
       mapZoom: 17,
       description: "A steady Dublin rain falling through a quiet city garden, gradually softening into lighter showers accompanied by birdsong and distant urban ambience.",
       image: "",
-      audio: "audio/garden_rain_ushers_quay.mp3",
+      audio: "audio/Ireland/garden_rain_ushers_quay.mp3",
       duration: "7:23",
       recordedDate: "MAY 2026",
       signatureSound: {
@@ -477,11 +477,11 @@ const collectionMemories = {
     }
   ],
 
-  dublinVoices: [
+  irelandVoices: [
     {
       title: "Voices In Space",
-      location: "Dublin Voices & Spaces",
-      cityCountry: "Dublin, Ireland",
+      location: "Ireland Voices & Spaces",
+      cityCountry: "Ireland",
       lat: 53.3498,
       lng: -6.2603,
       mapZoom: 14,

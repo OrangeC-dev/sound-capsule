@@ -110,7 +110,7 @@ function setupAppNavigation() {
       }
 
       if (sectionName === "collections") {
-        renderCollection("dublinStreets", "Dublin Streets");
+        renderCollection("irelandStreets", "Dublin Streets");
       }
     });
   });
