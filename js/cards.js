@@ -66,6 +66,55 @@ function initializeMemoryCardMap(card, memory) {
   }, 80);
 }
 
+function registerPublishedExploreCountries() {
+  const countriesByCode = new Map();
+  const countryNames = new Intl.DisplayNames("en", { type: "region" });
+
+  for (const [collectionId, memories] of Object.entries(collectionMemories)) {
+    const match = /^country-([a-z]{2})-([a-z]+)$/.exec(collectionId);
+
+    if (!match || !memories.length) {
+      continue;
+    }
+
+    const [, code, theme] = match;
+    const category = globalCollections.find(collection => collection.theme === theme);
+
+    if (!category) {
+      continue;
+    }
+
+    const firstMemory = memories[0];
+    const image = memories.find(memory => memory.image)?.image || "";
+    const name = countryNames.of(code.toUpperCase());
+    const country = countriesByCode.get(code) ?? {
+      id: `country-${code}`,
+      name,
+      type: "country",
+      theme,
+      image,
+      summary: `Field recordings from ${name}.`,
+      mapCenter: [firstMemory.lat, firstMemory.lng],
+      collectionIds: []
+    };
+
+    country.collectionIds.push(collectionId);
+    country.image ||= image;
+    countriesByCode.set(code, country);
+
+    exploreCollections.push({
+      id: collectionId,
+      name: category.name,
+      theme,
+      image
+    });
+  }
+
+  exploreArchive.countries.push(...countriesByCode.values());
+}
+
+registerPublishedExploreCountries();
+
 function getExploreMapContext(contextId) {
   const isMobile = window.matchMedia("(max-width: 480px)").matches;
 
@@ -86,6 +135,12 @@ function getExploreMapContext(contextId) {
       pins: []
     }
   };
+
+  const country = getExploreCountryById(contextId);
+
+  if (country?.mapCenter) {
+    return { center: country.mapCenter, zoom: isMobile ? 5.5 : 6, pins: [] };
+  }
 
   return contexts[contextId] || contexts.world;
 }
@@ -162,8 +217,12 @@ function renderTagList(tags) {
 }
 
 function getSignatureIconUrl(iconName) {
+  if (typeof iconName !== "string" || !/^[a-z0-9-]+$/i.test(iconName)) {
+    return "none";
+  }
+
   const iconUrl = new URL(`assets/icons/signature/${iconName}.svg`, window.location.href);
-  return `url('${iconUrl.href}')`;
+  return `url('${iconUrl.href.replace(/'/g, "%27")}')`;
 }
 
 function createMemoryCard(memory) {
@@ -177,12 +236,12 @@ function createMemoryCard(memory) {
   const publicTags = (memory.publicTags || memory.soundsCaptured || [])
     .slice(0, 5)
     .map(function(tag) {
-      return `<li>${tag}</li>`;
+      return `<li>${escapeAttribute(tag)}</li>`;
     })
     .join("");
 
   const recordedDateStamp = memory.recordedDate
-    ? `<time class="memory-date-stamp">${memory.recordedDate}</time>`
+    ? `<time class="memory-date-stamp">${escapeAttribute(memory.recordedDate)}</time>`
     : "";
 
   const locationDetail = memory.signatureSound
@@ -190,19 +249,19 @@ function createMemoryCard(memory) {
       <div class="signature-sound-badge">
         <span
           class="signature-sound-icon"
-          style="--signature-icon: ${getSignatureIconUrl(memory.signatureSound.icon)}"
+          style="--signature-icon: ${escapeAttribute(getSignatureIconUrl(memory.signatureSound.icon))}"
           aria-hidden="true"
         ></span>
 
         <span class="signature-sound-label">Signature Sound</span>
         <span class="signature-sound-divider" aria-hidden="true">•</span>
-        <span class="signature-sound-value">${memory.signatureSound.label}</span>
+        <span class="signature-sound-value">${escapeAttribute(memory.signatureSound.label)}</span>
       </div>
     `
     : `<p class="memory-exact">Exact recording location</p>`;
 
   const optionalImage = memory.image
-    ? `<img class="memory-detail-image" src="${memory.image}" alt="${memory.title}" />`
+    ? `<img class="memory-detail-image" src="${escapeAttribute(memory.image)}" alt="${escapeAttribute(memory.title)}" />`
     : "";
 
   card.innerHTML = `
@@ -216,11 +275,11 @@ function createMemoryCard(memory) {
 
         <div class="memory-front-content">
           <div class="memory-location-copy">
-            <h3>${memory.location || memory.title}</h3>
+            <h3>${escapeAttribute(memory.location || memory.title)}</h3>
 
             <p class="memory-city">
               <span class="memory-city-pin" aria-hidden="true"></span>
-              <span>${memory.cityCountry || "Dublin, Ireland"}</span>
+              <span>${escapeAttribute(memory.cityCountry || "Dublin, Ireland")}</span>
             </p>
 
             ${locationDetail}
@@ -234,9 +293,9 @@ function createMemoryCard(memory) {
         <div class="memory-back-content">
           ${optionalImage}
 
-          <p class="location">${memory.location}</p>
-          <h3>${memory.title}</h3>
-          <p>${memory.description}</p>
+          <p class="location">${escapeAttribute(memory.location)}</p>
+          <h3>${escapeAttribute(memory.title)}</h3>
+          <p>${escapeAttribute(memory.description)}</p>
 
           <div class="memory-detail-block">
             <span>Sounds captured</span>
@@ -371,9 +430,11 @@ function getExploreCountryById(countryId) {
 }
 
 function getCollectionCapsuleTotal(collectionIds) {
-  return (collectionIds || []).reduce(function(total, collectionId) {
-    return total + getCollectionCapsuleCount(collectionId);
-  }, 0);
+  const memories = (collectionIds || []).flatMap(function(collectionId) {
+    return getCollectionMemories(collectionId);
+  });
+
+  return new Set(memories.map(createMemoryId)).size;
 }
 
 function getExploreCountryCapsuleCount(country) {
@@ -754,10 +815,10 @@ function createExploreCapsuleRow(memory) {
       <span class="explore-row-signature">
         <span
           class="explore-row-signature-icon"
-          style="--signature-icon: ${getSignatureIconUrl(signature.icon)}"
+          style="--signature-icon: ${escapeAttribute(getSignatureIconUrl(signature.icon))}"
           aria-hidden="true"
         ></span>
-        <span>${signature.label}</span>
+        <span>${escapeAttribute(signature.label)}</span>
       </span>
     `
     : `<span class="explore-row-signature is-empty">—</span>`;
@@ -773,13 +834,13 @@ function createExploreCapsuleRow(memory) {
     </button>
 
     <div class="explore-row-main">
-      <h4>${memoryWithContext.title}</h4>
-      <p>${getMemoryLocationLabel(memoryWithContext)}</p>
+      <h4>${escapeAttribute(memoryWithContext.title)}</h4>
+      <p>${escapeAttribute(getMemoryLocationLabel(memoryWithContext))}</p>
     </div>
 
     ${signatureMarkup}
 
-    <span class="explore-row-duration">${memoryWithContext.duration || "0:00"}</span>
+    <span class="explore-row-duration">${escapeAttribute(memoryWithContext.duration || "0:00")}</span>
 
     ${createExplorePlayButton(memoryWithContext, memoryId)}
   `;

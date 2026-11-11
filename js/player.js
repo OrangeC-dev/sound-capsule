@@ -168,8 +168,8 @@ function renderCapsuleDetailItem(label, value) {
 
   return `
     <div class="capsule-detail-item">
-      <span>${label}</span>
-      <strong>${value}</strong>
+      <span>${escapeAttribute(label)}</span>
+      <strong>${escapeAttribute(value)}</strong>
     </div>
   `;
 }

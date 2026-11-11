@@ -1,7 +1,7 @@
 let homeFeaturedThumbMap = null;
 
 function getHomeFeaturedMemory() {
-  const playableMemories = [];
+  const playableMemoriesById = new Map();
 
   Object.keys(collectionMemories).forEach(function(collectionId) {
     const collection = getExploreCollectionById(collectionId);
@@ -12,15 +12,20 @@ function getHomeFeaturedMemory() {
         return;
       }
 
-      playableMemories.push(
-        addCollectionContext(
-          memory,
-          collectionId,
-          collection ? collection.name : ""
-        )
+      const id = createMemoryId(memory);
+
+      if (playableMemoriesById.has(id)) {
+        return;
+      }
+
+      playableMemoriesById.set(
+        id,
+        addCollectionContext(memory, collectionId, collection ? collection.name : "")
       );
     });
   });
+
+  const playableMemories = Array.from(playableMemoriesById.values());
 
   if (!playableMemories.length) {
     return null;
