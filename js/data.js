@@ -169,6 +169,7 @@ const exploreArchive = {
     {
       id: "ireland",
       name: "Ireland",
+      countryCode: "IE",
       type: "country",
       theme: "parks",
       image: "assets/images/countries/ireland_thumbnail.png",
@@ -185,6 +186,7 @@ const exploreArchive = {
     {
       id: "netherlands",
       name: "Netherlands",
+      countryCode: "NL",
       type: "country",
       theme: "coastal",
       image: "assets/images/countries/netherlands_thumbnail.png",

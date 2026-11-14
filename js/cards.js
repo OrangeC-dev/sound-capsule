@@ -90,6 +90,7 @@ function registerPublishedExploreCountries() {
     const country = countriesByCode.get(code) ?? {
       id: `country-${code}`,
       name,
+      countryCode: code.toUpperCase(),
       type: "country",
       theme,
       image,
@@ -196,6 +197,86 @@ function renderExploreCityMap(contextId) {
   window.setTimeout(function() {
     exploreCityLeafletMap.invalidateSize();
   }, 350);
+}
+
+async function loadExploreMapArtwork(fileName) {
+  const image = new Image();
+  image.alt = "";
+  image.src = `assets/maps/explore/${fileName}`;
+  await image.decode();
+  return image;
+}
+
+async function renderExploreCountryMap(country) {
+  const container = document.getElementById("explore-country-artwork");
+  const code = country.countryCode;
+
+  if (!container.hidden && container.dataset.mapCountry === code) {
+    return;
+  }
+
+  container.hidden = true;
+  container.dataset.mapCountry = code || "";
+
+  const artworkByCountry = {
+    IE: "ie-emerald.png",
+    NL: "nl-ember.png"
+  };
+  const artworkFile = artworkByCountry[code];
+
+  if (!artworkFile) {
+    renderExploreCityMap(country.id);
+    return;
+  }
+
+  const isCurrentCountry = () =>
+    currentAppSection === "explore" &&
+    !memorySection.hidden &&
+    memorySection.classList.contains("is-explore-country") &&
+    currentExploreView.countryId === country.id;
+
+  try {
+    const image = await loadExploreMapArtwork(artworkFile);
+
+    if (isCurrentCountry()) {
+      container.replaceChildren(image);
+      container.hidden = false;
+    }
+  } catch {
+    if (isCurrentCountry() && container.hidden) {
+      renderExploreCityMap(country.id);
+    }
+  }
+}
+
+async function renderExploreWorldMap() {
+  const container = document.getElementById("explore-world-artwork");
+
+  if (!container.hidden || container.dataset.loading) {
+    return;
+  }
+
+  const isCurrentWorld = () =>
+    currentAppSection === "explore" &&
+    !memorySection.hidden &&
+    memorySection.classList.contains("is-explore-world");
+
+  container.dataset.loading = "true";
+
+  try {
+    const image = await loadExploreMapArtwork("world-map-ember.png");
+
+    if (isCurrentWorld()) {
+      container.replaceChildren(image);
+      container.hidden = false;
+    }
+  } catch {
+    if (isCurrentWorld()) {
+      renderExploreCityMap("world");
+    }
+  } finally {
+    delete container.dataset.loading;
+  }
 }
 
 function createMemoryId(memory) {
@@ -597,7 +678,6 @@ function renderExploreCollections(collections) {
   currentExploreCollectionId = null;
   memorySection.classList.add("is-explore-landing");
   memorySection.classList.remove("is-explore-world");
-  memorySection.classList.remove("is-explore-country");
   memorySection.classList.remove("is-explore-list");
   memorySection.classList.remove("is-map-collection");
 
@@ -674,8 +754,8 @@ function renderExploreWorld() {
   memorySection.classList.remove("is-explore-list");
   memorySection.classList.remove("is-map-collection");
 
-  memoryTitle.textContent = "World";
-  memorySubtitle.textContent = "Choose a country to explore its sound archive.";
+  memoryTitle.innerHTML = 'World<span class="explore-world-period" aria-hidden="true">.</span>';
+  memorySubtitle.textContent = "A growing collection of places, preserved through sound.";
 
   const searchInput = document.getElementById("explore-search");
 
@@ -684,7 +764,7 @@ function renderExploreWorld() {
     searchInput.placeholder = "Search countries, places, collections, sounds...";
   }
 
-  renderExploreCityMap("world");
+  renderExploreWorldMap();
 
   capsuleGrid.className = "capsule-grid explore-collection-grid";
   capsuleGrid.innerHTML = "";
@@ -736,7 +816,7 @@ function renderExploreCountry(countryId) {
     searchInput.placeholder = `Search ${country.name} collections, places, sounds...`;
   }
   
-  renderExploreCityMap(country.id);
+  renderExploreCountryMap(country);
 
   capsuleGrid.className = "capsule-grid explore-collection-grid";
   capsuleGrid.innerHTML = "";

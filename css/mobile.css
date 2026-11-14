@@ -312,6 +312,21 @@
     margin-top: 10px;
   }
 
+  @media (pointer: coarse) {
+  .explore-section.is-explore-world {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .explore-section.is-explore-world .explore-city-hero {
+    padding-top: 0;
+  }
+
+  #explore-world-artwork {
+    top: -24px;
+  }
+}
+
   .explore-section.is-explore-country {
     margin-top: 10px;
   }

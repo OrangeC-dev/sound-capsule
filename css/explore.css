@@ -115,6 +115,95 @@
     linear-gradient(180deg, rgba(7, 9, 9, 0.02) 0%, rgba(7, 9, 9, 0.22) 24%, rgba(7, 9, 9, 0.84) 42%, #070909 68%, #070909 100%);
 }
 
+.explore-map-artwork {
+  --artwork-right-fade: 88%;
+  --artwork-bottom-fade: 56%;
+  --artwork-horizontal-mask: linear-gradient(
+    to right,
+    transparent,
+    #000 34% var(--artwork-right-fade),
+    transparent
+  );
+  --artwork-vertical-mask: linear-gradient(
+    to bottom,
+    transparent,
+    #000 14% var(--artwork-bottom-fade),
+    transparent
+  );
+
+  position: absolute;
+  right: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.6;
+  -webkit-mask-image: var(--artwork-horizontal-mask), var(--artwork-vertical-mask);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--artwork-horizontal-mask), var(--artwork-vertical-mask);
+  mask-composite: intersect;
+}
+
+.explore-map-artwork > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+}
+
+.explore-map-artwork[hidden],
+.explore-section:not(.is-explore-world) #explore-world-artwork,
+.explore-section:not(.is-explore-country) #explore-country-artwork,
+.explore-section.is-map-collection .explore-map-artwork,
+.explore-section.is-explore-world #explore-world-artwork:not([hidden]) ~ .explore-city-map,
+.explore-section.is-explore-world #explore-world-artwork:not([hidden]) ~ .explore-city-gradient,
+.explore-section.is-explore-country #explore-country-artwork:not([hidden]) ~ .explore-city-map,
+.explore-section.is-explore-country #explore-country-artwork:not([hidden]) ~ .explore-city-gradient {
+  display: none;
+}
+
+.explore-section.is-explore-country:not(.is-map-collection) .explore-city-hero {
+  max-width: none;
+}
+
+#explore-country-artwork {
+  top: -14px;
+  width: min(86%, 420px);
+  height: 250px;
+}
+
+#explore-world-artwork {
+  --artwork-right-fade: 90%;
+  --artwork-bottom-fade: 53%;
+
+  top: -22px;
+  width: min(90%, 1100px);
+  height: clamp(300px, 34vw, 460px);
+}
+
+#explore-world-artwork > img {
+  object-position: 25% 30%;
+}
+
+@media (max-width: 760px) {
+  #explore-country-artwork {
+    top: -8px;
+  }
+
+  #explore-world-artwork {
+    top: -14px;
+    width: 100%;
+    height: 270px;
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 480px) and (pointer: coarse) {
+  #explore-country-artwork {
+    top: -38px;
+  }
+}
+
 .explore-city-hero::after {
   display: none;
 }
@@ -143,6 +232,56 @@
   max-width: 420px;
   margin: 7px 0 0;
   color: rgba(244, 239, 231, 0.72);
+}
+
+.explore-world-eyebrow {
+  display: none;
+}
+
+.explore-section.is-explore-world .explore-city-hero {
+  max-width: none;
+  margin-bottom: clamp(28px, 3vw, 44px);
+  padding-top: clamp(12px, 2.5vw, 36px);
+}
+
+.explore-section.is-explore-world .explore-city-content {
+  gap: clamp(20px, 2.4vw, 36px);
+}
+
+.explore-section.is-explore-world .explore-world-eyebrow {
+  display: block;
+  margin: 0 0 12px;
+  color: var(--copper);
+  font-size: 11px;
+  letter-spacing: 0.26em;
+}
+
+.explore-section.is-explore-world .explore-city-copy h2 {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(46px, 5.2vw, 78px);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.explore-world-period {
+  color: var(--copper);
+}
+
+.explore-section.is-explore-world .explore-city-copy .page-subtitle {
+  max-width: 48ch;
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: clamp(15px, 1.5vw, 20px);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  .explore-section.is-explore-world .explore-city-content .explore-city-copy {
+    inset: auto;
+    margin-left: 0;
+  }
 }
 
 .explore-toolbar {
