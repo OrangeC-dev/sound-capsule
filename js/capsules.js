@@ -768,6 +768,46 @@ const collectionMemories = (function() {
         "isolated"
       ],
       "id": "wind-through-the-reeds-audio-netherlands-weather-wind-through-the-reeds-mp3"
+    },
+    {
+      "title": "End of Autumn in St Audoen's Park",
+      "audio": "audio/Ireland/st-audoens-park-9db7fed7.mp3",
+      "recordedDate": "NOV 2026",
+      "duration": "08:03",
+      "location": "St Audoen's Park",
+      "lat": 53.343976,
+      "lng": -6.27441,
+      "country": "Ireland",
+      "countryCode": "IE",
+      "city": "Dublin",
+      "cityCountry": "Dublin, Ireland",
+      "publicTags": [
+        "city-park",
+        "seagulls",
+        "distant city ambience"
+      ],
+      "hiddenSoundTags": [
+        "ambience",
+        "birdsong",
+        "atmosphere",
+        "city-park",
+        "distant traffic",
+        "seagulls",
+        "urban park ambience"
+      ],
+      "hiddenMoodTags": [
+        "atmospheric",
+        "everyday life",
+        "urban",
+        "natural",
+        "historic"
+      ],
+      "signatureSound": {
+        "label": "Seagulls",
+        "icon": "seagulls",
+        "story": "Nestled beside St Audoen's Church, one of Dublin's oldest surviving medieval churches, St Audoen's Park occupies a remarkable corner of the city's history. Dating back to the 12th century, the church stands alongside remnants of Dublin's medieval city walls, offering a glimpse into a time when this area formed part of the bustling medieval city.\\n\\nToday, the park provides a small green retreat amid the surrounding streets, where the sounds of modern Dublin blend with echoes of its past. As autumn draws to a close, the distinctive calls of seagulls dominate the soundscape, while the occasional rhythm of horses' hooves can be heard in the distance. Horses remain a familiar sight in parts of this neighbourhood, creating an unexpected connection between the city's historical character and its everyday life.\\n\\nA late-autumn portrait of Dublin, where centuries of history meet the ordinary sounds of a living city."
+      },
+      "id": "38407ba8-8c8c-45e7-9f24-2ed00d42cf4e"
     }
   ],
   "memberships": {
@@ -777,7 +817,8 @@ const collectionMemories = (function() {
     "irelandStreets": [
       "afternoon-rush-audio-ireland-capel-street-mp3",
       "morning-sounds-audio-ireland-harcourt-street-mp3",
-      "summer-evening-audio-ireland-drury-street-summer-evening-mp3"
+      "summer-evening-audio-ireland-drury-street-summer-evening-mp3",
+      "38407ba8-8c8c-45e7-9f24-2ed00d42cf4e"
     ],
     "irelandParks": [
       "quiet-corner-behind-trinity-audio-ireland-trinity-college-park-back-mp3",
@@ -785,7 +826,8 @@ const collectionMemories = (function() {
       "waterfall-in-the-distance-audio-ireland-iveagh-gardens-park-waterfall-mp3",
       "sunday-bells-audio-ireland-st-patricks-park-sunday-bells-mp3",
       "summer-birdsong-audio-ireland-tralee-park-mp3",
-      "city-life-audio-ireland-bishop-lucey-park-cork-mp3"
+      "city-life-audio-ireland-bishop-lucey-park-cork-mp3",
+      "38407ba8-8c8c-45e7-9f24-2ed00d42cf4e"
     ],
     "irelandTransport": [
       "red-line-luas-stop-audio-ireland-luas-redline-smithfield-stop-mp3",
