@@ -174,7 +174,7 @@ function renderCapsuleDetailItem(label, value) {
   `;
 }
 
-function updateCapsuleViewContent() {
+function updateCapsuleViewContent(currentMemoryData) {
   if (!currentMemoryData) {
     return;
   }
@@ -333,8 +333,8 @@ function openMemoryInExpandedPlayer(button) {
   openMemoryInCapsuleView(button);
 }
 
-function openCapsuleView() {
-  if (!currentMemoryData) {
+function openCapsuleView(memory = currentMemoryData) {
+  if (!memory) {
     nowPlayingText.textContent = "Choose a memory before opening more details.";
     return;
   }
@@ -356,7 +356,9 @@ function openCapsuleView() {
   });
 
   requestAnimationFrame(function() {
-    updateCapsuleViewContent();
+    if (!capsuleView.hidden) {
+      updateCapsuleViewContent(memory);
+    }
   });
 }
 
@@ -387,8 +389,6 @@ function showPersistentPlayer(memory) {
     persistentThumbMap,
     memory
   );
-
-  updateCapsuleViewContent();
 }
 
 function syncPersistentProgress() {
@@ -409,57 +409,71 @@ function setPersistentPlayingState(isPlaying) {
   setPlayButtonState(currentButton, isPlaying);
 }
 
+function isCurrentRecording(memory) {
+  return Boolean(
+    currentMemoryData &&
+    currentMemoryData.audio === memory.audio &&
+    createMemoryId(currentMemoryData) === createMemoryId(memory)
+  );
+}
+
 function togglePersistentPlayback() {
-  if (!currentMemoryData) {
+  const memory = currentMemoryData;
+
+  if (!memory) {
     return;
   }
 
   if (persistentAudio.paused) {
     persistentAudio.play().then(function() {
-      setPersistentPlayingState(true);
-      nowPlayingText.textContent = `Now playing: ${currentMemoryData.title}`;
-    }).catch(function() {
-      nowPlayingText.textContent = `${currentMemoryData.title} could not be played right now.`;
+      if (currentMemoryData === memory && !persistentAudio.paused) {
+        setPersistentPlayingState(true);
+        nowPlayingText.textContent = `Now playing: ${memory.title}`;
+      }
+    }).catch(function(error) {
+      if (currentMemoryData === memory && error.name !== "AbortError") {
+        setPersistentPlayingState(false);
+        nowPlayingText.textContent = `${memory.title} could not be played right now.`;
+      }
     });
   } else {
     persistentAudio.pause();
     setPersistentPlayingState(false);
-    nowPlayingText.textContent = `Paused: ${currentMemoryData.title}`;
+    nowPlayingText.textContent = `Paused: ${memory.title}`;
   }
 }
 
 function playMemory(button) {
-  const memory = getMemoryFromButton(button);
+  playRecording(getMemoryFromButton(button), button);
+}
 
+function playRecording(memory, button = null, { startOnly = false } = {}) {
   if (!memory.audio) {
     nowPlayingText.textContent = `${memory.title} does not have audio connected yet.`;
     return;
   }
 
-  if (currentButton === button && currentMemoryData) {
-    togglePersistentPlayback();
-    return;
+  const sameRecording = isCurrentRecording(memory);
+
+  if (!sameRecording || (button && button !== currentButton)) {
+    resetCardPlayer(currentButton);
+    setVisibleCardButtonsInactive(button);
+    currentButton = button;
+    currentMemoryCard = memory.card || null;
   }
 
-  resetCardPlayer(currentButton);
-  setVisibleCardButtonsInactive(button);
-
-  currentButton = button;
-  currentMemoryCard = memory.card;
-  currentMemoryData = memory;
-
-  showPersistentPlayer(memory);
-
-  persistentAudio.src = memory.audio;
-  persistentAudio.load();
-
-  persistentAudio.play().then(function() {
-    setPersistentPlayingState(true);
-    nowPlayingText.textContent = `Now playing: ${memory.title}`;
-  }).catch(function() {
+  if (!sameRecording) {
+    currentMemoryData = memory;
+    showPersistentPlayer(memory);
+    persistentAudio.src = memory.audio;
+    persistentAudio.load();
     setPersistentPlayingState(false);
-    nowPlayingText.textContent = `${memory.title} could not be played right now.`;
-  });
+    syncPersistentProgress();
+  }
+
+  if (!startOnly || persistentAudio.paused) {
+    togglePersistentPlayback();
+  }
 }
 
 function openCurrentMemoryCard() {

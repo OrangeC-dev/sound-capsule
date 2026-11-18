@@ -13,6 +13,8 @@
   crossorigin=""
 />
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
@@ -192,6 +194,75 @@
           <div class="memory-map" id="memory-map" aria-label="Memory locations">
             <div id="leaflet-map" class="leaflet-map"></div>
             <div id="collection-map" class="collection-map" hidden></div>
+            <div class="map-toolbar">
+              <div class="map-search">
+                <form id="map-search-form" role="search" aria-label="Search the sound map">
+                  <button type="submit" aria-label="Search the map">
+                    <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                  </button>
+                <input id="map-search-input" type="text" inputmode="search"
+                  autocomplete="off"
+                  aria-label="Search countries, cities or places" placeholder="Search for a place..." />
+                </form>
+                <p id="map-search-status" role="status"></p>
+              </div>
+
+              <div class="map-country-control">
+                <select id="map-country-select" class="map-country-picker" aria-label="Map region">
+                  <option value="world">World</option>
+                </select>
+                <i class="ph ph-caret-down" aria-hidden="true"></i>
+              </div>
+            </div>
+
+            <div class="map-view-controls" role="group" aria-label="Map controls">
+              <div class="map-zoom-buttons">
+                <button id="map-zoom-in" type="button" aria-label="Zoom in">
+                  <i class="ph ph-plus" aria-hidden="true"></i>
+                </button>
+                <button id="map-zoom-out" type="button" aria-label="Zoom out">
+                  <i class="ph ph-minus" aria-hidden="true"></i>
+                </button>
+              </div>
+              <button id="map-reset-world" type="button" aria-label="Return to the world map">
+                <i class="ph ph-globe" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <section id="map-recording-preview" class="map-recording-preview"
+              aria-labelledby="map-recording-preview-title" tabindex="-1" hidden>
+              <button id="map-preview-close" type="button" aria-label="Close recording preview">
+                <i class="ph ph-x" aria-hidden="true"></i>
+              </button>
+
+              <div class="map-preview-main">
+                <div class="map-preview-art" aria-hidden="true">
+                  <div id="map-preview-thumbnail" class="player-map-thumb"></div>
+                </div>
+
+                <div class="map-preview-copy">
+                  <p id="map-preview-region"></p>
+                  <h3 id="map-recording-preview-title"></h3>
+                  <p id="map-preview-location"></p>
+                  <p class="map-preview-duration">
+                    <i class="ph ph-headphones" aria-hidden="true"></i>
+                    <span id="map-preview-duration"></span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="map-preview-footer">
+                <button id="map-preview-explore" type="button">
+                  <i class="ph ph-map-pin" aria-hidden="true"></i>
+                  <span>Explore this capsule</span>
+                  <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+                </button>
+
+                <button id="map-preview-play" class="map-preview-play" type="button" aria-label="Listen to recording">
+                  <span class="play-icon" aria-hidden="true"></span>
+                </button>
+              </div>
+            </section>
           </div>
         </section>
 
@@ -414,9 +485,12 @@
   crossorigin=""
 ></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+
 <script src="js/data.js"></script>
 <script src="js/capsules.js"></script>
 <script src="js/audio-dates.js"></script>
+<script src="js/map-country-boundaries.js"></script>
 <script src="js/map.js"></script>
 <script src="js/cards.js"></script>
 <script src="js/player.js"></script>

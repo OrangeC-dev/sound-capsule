@@ -26,6 +26,7 @@ function setAppSection(sectionName) {
   document.body.classList.remove("has-capsule-view");
 
   if (sectionName === "map") {
+    appContent.scrollTop = 0;
     setMapPageHeading();
     memorySection.hidden = true;
     capsuleGrid.innerHTML = "";
