@@ -5,8 +5,11 @@ let currentMemoryCard = null;
 let currentMemoryData = null;
 let persistentThumbMap = null;
 let capsuleThumbMap = null;
+let capsuleStoryThumbMap = null;
 let capsuleLoopThumbMap = null;
 let previousCapsuleSection = "map";
+let capsuleReturnFocus = null;
+let capsuleCarouselResetTimer = null;
 
 function formatTime(seconds) {
   if (!Number.isFinite(seconds)) {
@@ -69,7 +72,8 @@ function renderPlayerMapThumbnail(container, existingMap, memory) {
 
   L.marker(position, {
     icon: createMemoryLeafletIcon(),
-    interactive: false
+    interactive: false,
+    keyboard: false
   }).addTo(thumbMap);
 
   window.setTimeout(function() {
@@ -161,13 +165,17 @@ function setVisibleCardButtonsInactive(exceptButton) {
   });
 }
 
-function renderCapsuleDetailItem(label, value) {
+function renderCapsuleDetailItem(label, value, fullWidth = false) {
   if (!value) {
     return "";
   }
 
+  const itemClass = fullWidth
+    ? "capsule-detail-item is-wide"
+    : "capsule-detail-item";
+
   return `
-    <div class="capsule-detail-item">
+    <div class="${itemClass}">
       <span>${escapeAttribute(label)}</span>
       <strong>${escapeAttribute(value)}</strong>
     </div>
@@ -179,12 +187,38 @@ function updateCapsuleViewContent(currentMemoryData) {
     return;
   }
 
+  window.clearTimeout(capsuleCarouselResetTimer);
+  capsuleCarouselResetTimer = null;
+
+  const capsuleRegion = document.getElementById("capsule-view-region");
+  const capsuleIntro = document.getElementById("capsule-view-intro");
+  const capsuleDuration = document.getElementById("capsule-view-duration");
+  const capsuleType = document.getElementById("capsule-view-type");
+  const region = currentMemoryData.cityCountry || [
+    currentMemoryData.city || currentMemoryData.town,
+    currentMemoryData.country
+  ].filter(Boolean).join(", ");
+  const intro = (currentMemoryData.intro || "").trim();
+
   capsuleViewBack.textContent = "← Back";
   capsuleViewTitle.textContent = currentMemoryData.title;
-  capsuleViewLocation.textContent = currentMemoryData.locationLine || currentMemoryData.location || "Sound Capsule";
-  capsuleViewDate.textContent = currentMemoryData.recordedDate
-  ? `Recorded ${currentMemoryData.recordedDate}`
-  : "";
+
+  capsuleRegion.textContent = region ? `/ ${region}` : "";
+  capsuleRegion.hidden = !region;
+
+  capsuleIntro.textContent = intro;
+  capsuleIntro.hidden = !intro;
+
+  capsuleViewLocation.textContent =
+    currentMemoryData.locationLine || getMemoryLocationLabel(currentMemoryData) || "Sound Capsule";
+
+  capsuleViewDate.textContent = currentMemoryData.recordedDate || "";
+  capsuleViewDate.parentElement.hidden = !currentMemoryData.recordedDate;
+
+  capsuleDuration.textContent = currentMemoryData.duration || "";
+  capsuleDuration.parentElement.hidden = !currentMemoryData.duration;
+
+  capsuleType.textContent = currentMemoryData.recordingType || "Field recording";
 
   if (!capsuleView.hidden && capsuleViewMapThumb) {
     capsuleThumbMap = renderPlayerMapThumbnail(
@@ -194,18 +228,46 @@ function updateCapsuleViewContent(currentMemoryData) {
     );
   }
 
-  if (currentMemoryData.image) {
-    capsuleViewPhotoSlide.hidden = false;
-    capsuleViewMapLoopSlide.hidden = false;
+  const storyColumn = document.getElementById("capsule-story-column");
+  const storySection = document.getElementById("capsule-story");
+  const storyTitle = document.getElementById("capsule-story-title");
+  const storyBody = document.getElementById("capsule-story-body");
+  const story = (currentMemoryData.signatureSound?.story || "").trim();
+  const hasPhoto = Boolean(currentMemoryData.image);
 
+  storyTitle.textContent =
+    currentMemoryData.storyTitle || currentMemoryData.location || currentMemoryData.title;
+
+  storyBody.replaceChildren();
+
+  for (const text of story.split(/\n\s*\n/).filter(Boolean)) {
+    const paragraph = document.createElement("p");
+    paragraph.textContent = text.trim();
+    storyBody.appendChild(paragraph);
+  }
+
+  storySection.hidden = !story;
+  storyColumn.hidden = !story && !hasPhoto;
+
+  capsuleVisualCarousel.hidden = !hasPhoto;
+  capsuleViewPhotoSlide.hidden = !hasPhoto;
+  capsuleViewMapLoopSlide.hidden = !hasPhoto;
+  capsuleVisualIndicators.hidden = !hasPhoto;
+  capsuleVisualNext.hidden = !hasPhoto;
+  capsuleVisualCarousel.classList.toggle("has-multiple-visuals", hasPhoto);
+  capsuleVisualCarousel.classList.toggle("is-photo-active", hasPhoto);
+
+  if (hasPhoto) {
     capsuleViewImage.src = currentMemoryData.image;
     capsuleViewImage.alt = `${currentMemoryData.title} location photograph`;
 
-    capsuleVisualCarousel.classList.add("has-multiple-visuals");
-    capsuleVisualIndicators.hidden = false;
-    capsuleVisualNext.hidden = false;
+    if (!capsuleView.hidden) {
+      capsuleStoryThumbMap = renderPlayerMapThumbnail(
+        document.getElementById("capsule-story-map-thumb"),
+        capsuleStoryThumbMap,
+        currentMemoryData
+      );
 
-    if (!capsuleView.hidden && capsuleViewMapLoopThumb) {
       capsuleLoopThumbMap = renderPlayerMapThumbnail(
         capsuleViewMapLoopThumb,
         capsuleLoopThumbMap,
@@ -213,15 +275,13 @@ function updateCapsuleViewContent(currentMemoryData) {
       );
     }
   } else {
-    capsuleViewPhotoSlide.hidden = true;
-    capsuleViewMapLoopSlide.hidden = true;
-
     capsuleViewImage.removeAttribute("src");
     capsuleViewImage.alt = "";
 
-    capsuleVisualCarousel.classList.remove("has-multiple-visuals", "is-photo-active");
-    capsuleVisualIndicators.hidden = true;
-    capsuleVisualNext.hidden = true;
+    if (capsuleStoryThumbMap) {
+      capsuleStoryThumbMap.remove();
+      capsuleStoryThumbMap = null;
+    }
 
     if (capsuleLoopThumbMap) {
       capsuleLoopThumbMap.remove();
@@ -230,67 +290,57 @@ function updateCapsuleViewContent(currentMemoryData) {
   }
 
   capsuleVisuals.classList.add("is-resetting");
-  capsuleVisuals.scrollLeft = 0;
-  capsuleVisualCarousel.classList.remove("is-photo-active");
+  capsuleVisuals.scrollLeft = hasPhoto ? getCapsuleVisualStep() : 0;
 
-  requestAnimationFrame(function () {
+  capsuleVisualIndicators.querySelectorAll("span").forEach(function(bar, index) {
+    bar.classList.toggle("is-active", index === (hasPhoto ? 1 : 0));
+  });
+
+  requestAnimationFrame(function() {
     capsuleVisuals.classList.remove("is-resetting");
   });
 
-  if (currentMemoryData.signatureSound) {
-    const capsuleSignatureIcon = capsuleViewSignature.querySelector(".capsule-signature-action-icon");
+  const signatureSound = currentMemoryData.signatureSound;
+  const capsuleSignatureIcon = capsuleViewSignature.querySelector(".capsule-signature-action-icon");
 
-    capsuleViewSignature.hidden = false;
-    capsuleViewSignature.classList.remove("is-collapsed");
-    capsuleViewSignatureValue.textContent = currentMemoryData.signatureSound.label;
+  capsuleViewSignature.hidden = !signatureSound;
+  capsuleViewSignatureValue.textContent = signatureSound?.label || "";
 
-    capsuleViewSignatureDescription.textContent =
-      currentMemoryData.signatureSound.story ||
-      currentMemoryData.signatureSound.description ||
-      currentMemoryData.description ||
-      "Signature sound story will appear here.";
-
-    if (capsuleViewSignatureToggle) {
-      capsuleViewSignatureToggle.setAttribute("aria-expanded", "true");
-    }
-
-    if (capsuleSignatureIcon) {
-      capsuleSignatureIcon.style.setProperty(
-        "--signature-icon",
-        getSignatureIconUrl(currentMemoryData.signatureSound.icon)
-      );
-    }
+  if (signatureSound) {
+    capsuleSignatureIcon.style.setProperty(
+      "--signature-icon",
+      getSignatureIconUrl(signatureSound.icon)
+    );
   } else {
-    const capsuleSignatureIcon = capsuleViewSignature.querySelector(".capsule-signature-action-icon");
-
-    capsuleViewSignature.hidden = true;
-    capsuleViewSignature.classList.remove("is-collapsed");
-    capsuleViewSignatureValue.textContent = "";
-
-    if (capsuleViewSignatureDescription) {
-      capsuleViewSignatureDescription.textContent = "";
-    }
-
-    if (capsuleViewSignatureToggle) {
-      capsuleViewSignatureToggle.setAttribute("aria-expanded", "true");
-    }
-
-    if (capsuleSignatureIcon) {
-      capsuleSignatureIcon.style.removeProperty("--signature-icon");
-    }
+    capsuleSignatureIcon.style.removeProperty("--signature-icon");
   }
+
+  const capsuleId = createMemoryId(currentMemoryData);
+  const collectionNames = exploreCollections
+    .filter(function(collection) {
+      return getCollectionMemories(collection.id).some(function(memory) {
+        return createMemoryId(memory) === capsuleId;
+      });
+    })
+    .map(function(collection) {
+      return collection.name;
+    });
+
+  const collectionLabel = [...new Set(collectionNames)].join(", ") ||
+    currentMemoryData.collectionName || "";
 
   capsuleViewDetails.innerHTML = [
     renderCapsuleDetailItem("Recorded", currentMemoryData.recordedDate),
     renderCapsuleDetailItem("Duration", currentMemoryData.duration),
-    renderCapsuleDetailItem("Collection", currentMemoryData.collectionName),
+    renderCapsuleDetailItem("Collections", collectionLabel),
     renderCapsuleDetailItem(
-      "Signature Sound",
-      currentMemoryData.signatureSound ? currentMemoryData.signatureSound.label : ""
+      "Location",
+      currentMemoryData.locationLine || getMemoryLocationLabel(currentMemoryData)
     ),
     renderCapsuleDetailItem(
       "Sounds Captured",
-      currentMemoryData.publicTags ? currentMemoryData.publicTags.join(", ") : ""
+      currentMemoryData.publicTags?.join(" · "),
+      true
     )
   ].join("") || `
     <p class="capsule-detail-empty">Technical recording details will appear here.</p>
@@ -339,6 +389,10 @@ function openCapsuleView(memory = currentMemoryData) {
     return;
   }
 
+  if (capsuleView.hidden) {
+    capsuleReturnFocus = document.activeElement;
+  }
+
   previousCapsuleSection = currentAppSection || previousCapsuleSection || "map";
 
   homeView.hidden = true;
@@ -352,21 +406,54 @@ function openCapsuleView(memory = currentMemoryData) {
 
   appContent.scrollTo({
     top: 0,
-    behavior: "smooth"
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto"
+      : "smooth"
   });
 
   requestAnimationFrame(function() {
     if (!capsuleView.hidden) {
       updateCapsuleViewContent(memory);
+      capsuleViewTitle.focus({ preventScroll: true });
     }
   });
 }
 
 function closeCapsuleView() {
+  const returnFocus = capsuleReturnFocus;
+  capsuleReturnFocus = null;
+
+  window.clearTimeout(capsuleCarouselResetTimer);
+  capsuleCarouselResetTimer = null;
+
   capsuleView.hidden = true;
   document.body.classList.remove("has-capsule-view");
-
   setAppSection(previousCapsuleSection || "map");
+
+  requestAnimationFrame(function() {
+    if (!capsuleView.hidden) {
+      return;
+    }
+
+    if (returnFocus &&
+        returnFocus !== document.body &&
+        returnFocus.isConnected &&
+        returnFocus.getClientRects().length &&
+        window.getComputedStyle(returnFocus).visibility !== "hidden") {
+      returnFocus.focus();
+      return;
+    }
+
+    const navButton = document.querySelector(
+      `[data-app-section="${previousCapsuleSection}"]`
+    );
+    const menuButton = document.getElementById("mobile-menu-toggle");
+    const target = window.matchMedia("(max-width: 480px)").matches
+      ? menuButton
+      : navButton;
+
+    target?.focus({ preventScroll: true });
+  });
 }
 
 function showPersistentPlayer(memory) {
@@ -510,6 +597,28 @@ function setupPersistentPlayer() {
 
   capsuleViewBack.addEventListener("click", closeCapsuleView);
 
+    const capsuleMapObserver = new ResizeObserver(function(entries) {
+    entries.forEach(function(entry) {
+      const mapScale = entry.target.querySelector(".player-map-thumb-scale");
+      const mapCanvas = entry.target.querySelector(".player-map-thumb-canvas");
+
+      if (!mapScale || !mapCanvas || !entry.contentRect.width || !entry.contentRect.height) {
+        return;
+      }
+
+      const scale = Math.max(
+        entry.contentRect.width / mapCanvas.offsetWidth,
+        entry.contentRect.height / mapCanvas.offsetHeight
+      ) * 1.02;
+
+      mapScale.style.setProperty("--thumb-scale", scale);
+    });
+  });
+
+  capsuleView.querySelectorAll(".player-map-thumb").forEach(function(container) {
+    capsuleMapObserver.observe(container);
+  });
+
   persistentPlayerProgress.addEventListener("input", function() {
     if (!Number.isFinite(persistentAudio.duration)) {
       return;
@@ -522,47 +631,43 @@ function setupPersistentPlayer() {
   persistentAudio.addEventListener("loadedmetadata", syncPersistentProgress);
   persistentAudio.addEventListener("timeupdate", syncPersistentProgress);
 
-  if (capsuleViewSignatureToggle) {
-    capsuleViewSignatureToggle.addEventListener("click", function () {
-      const isExpanded = capsuleViewSignatureToggle.getAttribute("aria-expanded") === "true";
-
-      capsuleViewSignatureToggle.setAttribute("aria-expanded", String(!isExpanded));
-      capsuleViewSignature.classList.toggle("is-collapsed", isExpanded);
-    });
-  }
-
   if (capsuleVisualNext) {
-    capsuleVisualNext.addEventListener("click", function () {
+    capsuleVisualNext.addEventListener("click", function() {
       const slideStep = getCapsuleVisualStep();
 
       if (!slideStep || !capsuleVisualCarousel.classList.contains("has-multiple-visuals")) {
         return;
       }
 
+      window.clearTimeout(capsuleCarouselResetTimer);
+      capsuleCarouselResetTimer = null;
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const currentSlide = Math.round(capsuleVisuals.scrollLeft / slideStep);
       const nextSlide = currentSlide >= 1 ? 2 : 1;
 
       capsuleVisuals.scrollTo({
         left: nextSlide * slideStep,
-        behavior: "smooth"
+        behavior: reduceMotion ? "auto" : "smooth"
       });
 
       if (nextSlide === 2) {
-        window.setTimeout(function () {
+        capsuleCarouselResetTimer = window.setTimeout(function() {
+          capsuleCarouselResetTimer = null;
           capsuleVisuals.classList.add("is-resetting");
           capsuleVisuals.scrollLeft = 0;
           capsuleVisualCarousel.classList.remove("is-photo-active");
 
           const indicatorBars = capsuleVisualIndicators.querySelectorAll("span");
 
-          indicatorBars.forEach(function (bar, index) {
+          indicatorBars.forEach(function(bar, index) {
             bar.classList.toggle("is-active", index === 0);
           });
 
-          requestAnimationFrame(function () {
+          requestAnimationFrame(function() {
             capsuleVisuals.classList.remove("is-resetting");
           });
-        }, 460);
+        }, reduceMotion ? 0 : 460);
       }
     });
   }

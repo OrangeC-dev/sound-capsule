@@ -330,104 +330,132 @@
           </div>
 
           <div class="capsule-hero">
-            <div class="capsule-visual-carousel" id="capsule-visual-carousel">
-              <div class="capsule-visuals" id="capsule-visuals" aria-label="Capsule visuals">
-                <figure class="capsule-visual-slide is-active">
-                  <div class="player-map-thumb capsule-map-thumb" id="capsule-view-map-thumb" aria-hidden="true"></div>
-                </figure>
-
-                <figure class="capsule-visual-slide capsule-photo-slide" id="capsule-view-photo-slide" hidden>
-                  <img id="capsule-view-image" src="" alt="" />
-                </figure>
-
-                <figure class="capsule-visual-slide capsule-map-loop-slide" id="capsule-view-map-loop-slide" hidden>
-                  <div class="player-map-thumb capsule-map-thumb" id="capsule-view-map-loop-thumb" aria-hidden="true"></div>
-                </figure>
-              </div>
-
-              <div class="capsule-visual-indicators" id="capsule-visual-indicators" hidden>
-                <span class="is-active"></span>
-                <span></span>
-              </div>
-
-              <button class="capsule-visual-next" id="capsule-visual-next" type="button" aria-label="View next image" hidden>
-                <span aria-hidden="true"></span>
-              </button>
-            </div>
+            <figure class="capsule-visual-slide">
+              <div class="player-map-thumb capsule-map-thumb" id="capsule-view-map-thumb" aria-hidden="true"></div>
+            </figure>
 
             <div class="capsule-identity">
-              <h2 id="capsule-view-title">Choose a memory</h2>
+              <p class="capsule-archive-label">
+                <i class="ph ph-waveform" aria-hidden="true"></i>
+                <strong>Sound Archive</strong>
+                <span id="capsule-view-region" hidden></span>
+              </p>
+
+              <h2 id="capsule-view-title" tabindex="-1">Choose a memory</h2>
+              <p class="capsule-intro" id="capsule-view-intro" hidden></p>
 
               <p class="capsule-meta-row">
                 <span class="ph ph-map-pin capsule-meta-icon" aria-hidden="true"></span>
                 <span id="capsule-view-location">Sound Capsule</span>
               </p>
 
-              <p class="capsule-meta-row">
-                <span class="ph ph-calendar-blank capsule-meta-icon" aria-hidden="true"></span>
-                <span class="capsule-date" id="capsule-view-date"></span>
-              </p>
+              <ul class="capsule-hero-metadata" aria-label="Recording metadata">
+                <li>
+                  <i class="ph ph-calendar-blank" aria-hidden="true"></i>
+                  <span class="capsule-date" id="capsule-view-date"></span>
+                </li>
+                <li>
+                  <i class="ph ph-clock" aria-hidden="true"></i>
+                  <span id="capsule-view-duration"></span>
+                </li>
+                <li>
+                  <i class="ph ph-waveform" aria-hidden="true"></i>
+                  <span id="capsule-view-type"></span>
+                </li>
+              </ul>
             </div>
           </div>
 
-          <section class="capsule-content-section capsule-signature-section" id="capsule-view-signature" hidden>
-            <div class="capsule-signature-section-inner">
-              <div class="capsule-signature-header">
-                <div class="capsule-signature-copy">
-                  <p class="capsule-signature-eyebrow">Signature Sound</p>
+          <div class="capsule-editorial-layout">
+            <div class="capsule-story-column" id="capsule-story-column">
+              <section class="capsule-story" id="capsule-story" aria-labelledby="capsule-story-title" hidden>
+                <p class="capsule-story-eyebrow">The story behind the sound</p>
+                <h3 id="capsule-story-title"></h3>
+                <div class="capsule-story-body" id="capsule-story-body"></div>
+              </section>
 
-                  <h3 class="capsule-signature-heading" id="capsule-view-signature-value"> 
-                    Signature sound
-                  </h3>
+              <div class="capsule-visual-carousel" id="capsule-visual-carousel"
+                role="group" aria-roledescription="carousel"
+                aria-label="Capsule map and photograph" hidden>
+                <div class="capsule-visuals" id="capsule-visuals">
+                  <figure class="capsule-visual-slide">
+                    <div class="player-map-thumb" id="capsule-story-map-thumb" aria-hidden="true"></div>
+                  </figure>
+
+                  <figure class="capsule-visual-slide capsule-photo-slide" id="capsule-view-photo-slide" hidden>
+                    <img id="capsule-view-image" src="" alt="" />
+                  </figure>
+
+                  <figure class="capsule-visual-slide capsule-map-loop-slide" id="capsule-view-map-loop-slide" hidden>
+                    <div class="player-map-thumb" id="capsule-view-map-loop-thumb" aria-hidden="true"></div>
+                  </figure>
                 </div>
 
-                <button
-                  class="capsule-signature-toggle"
-                  id="capsule-signature-toggle"
-                  type="button"
-                  aria-expanded="true"
-                  aria-controls="capsule-view-signature-description"
-                  aria-label="Toggle Signature Sound story"
-                >
-                  <span class="capsule-signature-controls">
-                    <span class="capsule-signature-action-icon" aria-hidden="true"></span>
-                    <span class="capsule-signature-chevron" aria-hidden="true"></span>
-                  </span>
+                <div class="capsule-visual-indicators" id="capsule-visual-indicators" hidden>
+                  <span></span>
+                  <span class="is-active"></span>
+                </div>
+
+                <button class="capsule-visual-next" id="capsule-visual-next" type="button" aria-label="View next image" hidden>
+                  <span aria-hidden="true"></span>
                 </button>
               </div>
-
-              <div class="capsule-signature-story">
-                <p id="capsule-view-signature-description"></p>
-              </div>
             </div>
+
+            <div class="capsule-information-column">
+          <section class="capsule-content-section capsule-info-card capsule-signature-section"
+            id="capsule-view-signature" aria-labelledby="capsule-view-signature-value" hidden>
+            <span class="capsule-signature-symbol" aria-hidden="true">
+              <span class="capsule-signature-action-icon"></span>
+            </span>
+
+            <div class="capsule-signature-copy">
+              <p class="capsule-signature-eyebrow">Signature Sound</p>
+              <h3 class="capsule-signature-heading" id="capsule-view-signature-value"></h3>
+            </div>
+
+            <i class="ph ph-waveform capsule-signature-waveform" aria-hidden="true"></i>
           </section>
 
-          <section class="capsule-content-section">
-            <h3>DETAILS</h3>
+          <section class="capsule-content-section capsule-info-card capsule-recording-details"
+            aria-labelledby="capsule-recording-details-title">
+            <div class="capsule-info-card-header">
+              <h3 id="capsule-recording-details-title">Recording Details</h3>
+              <i class="ph ph-archive-box" aria-hidden="true"></i>
+            </div>
             <div class="capsule-detail-grid" id="capsule-view-details"></div>
           </section>
 
-          <section class="capsule-content-section">
-            <h3>LISTENING XP</h3>
+          <section class="capsule-content-section capsule-info-card capsule-listening-experience"
+            aria-labelledby="capsule-listening-title">
+            <div class="capsule-listening-heading">
+              <i class="ph ph-sliders-horizontal" aria-hidden="true"></i>
+              <h3 id="capsule-listening-title">Listening Experience</h3>
+            </div>
+
             <p class="capsule-section-subtitle">
               Shape the listening experience without altering the original recording.
             </p>
 
-            <div class="capsule-listening-presets" aria-label="Listening XP presets">
-              <button class="is-active" type="button">Original</button>
-              <button type="button">Warm</button>
-              <button type="button">Detail</button>
-              <button type="button">Custom</button>
+            <div class="capsule-listening-presets" role="group" aria-label="Listening presets">
+              <button class="is-active" type="button" aria-pressed="true">Original</button>
+              <button type="button" aria-pressed="false">Warm</button>
+              <button type="button" aria-pressed="false">Detail</button>
+              <button type="button" aria-pressed="false">Custom</button>
             </div>
 
             <p class="capsule-preservation-note">
-              These adjustments only affect your playback. The original recording remains unchanged.
+              <i class="ph ph-info" aria-hidden="true"></i>
+              <span>Playback adjustments preserve the archived recording.</span>
             </p>
 
             <button class="capsule-reset-button" type="button">
-              Reset to Original
+              <i class="ph ph-arrow-counter-clockwise" aria-hidden="true"></i>
+              <span>Reset to Original</span>
             </button>
           </section>
+            </div>
+          </div>
         </section>
       </main>
     </div>

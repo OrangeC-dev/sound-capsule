@@ -224,13 +224,56 @@
     display: none;
   }
 
-  .capsule-identity h2 {
-    font-size: 30px;
+  body.has-capsule-view .app-shell > .app-content {
+    padding: 12px max(16px, var(--safe-area-right))
+      calc(28px + var(--safe-area-bottom)) max(16px, var(--safe-area-left));
   }
 
-  .capsule-visual-slide,
-  .capsule-photo-slide img {
-    min-height: 210px;
+  .capsule-view .capsule-hero > .capsule-visual-slide {
+    height: clamp(190px, 56vw, 250px);
+    min-height: 0;
+  }
+
+  .capsule-view .capsule-identity {
+    gap: 12px;
+  }
+
+  .capsule-view .capsule-identity h2 {
+    font-size: clamp(28px, 8vw, 34px);
+    line-height: 1.12;
+  }
+
+  .capsule-view .capsule-archive-label {
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .capsule-view .capsule-hero-metadata {
+    gap: 10px 16px;
+    padding-top: 14px;
+  }
+
+  .capsule-view .capsule-hero-metadata > li {
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .capsule-view .capsule-story h3 {
+    font-size: clamp(24px, 7vw, 30px);
+    line-height: 1.2;
+  }
+
+  .capsule-view .capsule-story-column .capsule-visual-slide {
+    height: clamp(210px, 55vw, 260px);
+    min-height: 0;
+  }
+
+  .capsule-view .capsule-information-column > .capsule-info-card {
+    padding: 18px;
+    border-radius: 16px;
   }
 
   .persistent-player {
@@ -520,5 +563,16 @@
   .home-preservation p:last-child {
     font-size: 12px;
     line-height: 1.55;
+  }
+}
+
+@media (max-width: 360px) {
+  .capsule-view .capsule-recording-details .capsule-detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .capsule-view .capsule-listening-presets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
