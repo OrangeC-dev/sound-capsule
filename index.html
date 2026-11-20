@@ -406,12 +406,20 @@
           <section class="capsule-content-section capsule-info-card capsule-signature-section"
             id="capsule-view-signature" aria-labelledby="capsule-view-signature-value" hidden>
             <span class="capsule-signature-symbol" aria-hidden="true">
-              <span class="capsule-signature-action-icon"></span>
+              <img class="capsule-signature-illustration"
+                id="capsule-signature-illustration"
+                alt=""
+                decoding="async"
+                draggable="false"
+                hidden />
+              <span class="capsule-signature-action-icon" hidden></span>
+              <span class="ph ph-waveform capsule-signature-fallback"></span>
             </span>
 
             <div class="capsule-signature-copy">
               <p class="capsule-signature-eyebrow">Signature Sound</p>
               <h3 class="capsule-signature-heading" id="capsule-view-signature-value"></h3>
+              <p class="capsule-signature-caption" id="capsule-signature-caption" hidden></p>
             </div>
 
             <i class="ph ph-waveform capsule-signature-waveform" aria-hidden="true"></i>
@@ -516,6 +524,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
 
 <script src="js/data.js"></script>
+<script src="js/signature-sounds.js"></script>
 <script src="js/capsules.js"></script>
 <script src="js/audio-dates.js"></script>
 <script src="js/map-country-boundaries.js"></script>

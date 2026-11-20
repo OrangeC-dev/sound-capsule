@@ -10,6 +10,7 @@ let capsuleLoopThumbMap = null;
 let previousCapsuleSection = "map";
 let capsuleReturnFocus = null;
 let capsuleCarouselResetTimer = null;
+let capsuleSignatureRenderId = 0;
 
 function formatTime(seconds) {
   if (!Number.isFinite(seconds)) {
@@ -182,6 +183,86 @@ function renderCapsuleDetailItem(label, value, fullWidth = false) {
   `;
 }
 
+async function renderCapsuleSignatureSound(signatureSound) {
+  const renderId = ++capsuleSignatureRenderId;
+  const definition = getSignatureSoundDefinition(signatureSound);
+  const illustration = document.getElementById("capsule-signature-illustration");
+  const icon = capsuleViewSignature.querySelector(".capsule-signature-action-icon");
+  const fallback = capsuleViewSignature.querySelector(".capsule-signature-fallback");
+  const caption = document.getElementById("capsule-signature-caption");
+
+  capsuleViewSignature.hidden = !definition;
+  capsuleViewSignatureValue.textContent = definition?.label || "";
+  caption.textContent = definition?.description || "";
+  caption.hidden = !definition?.description;
+
+  illustration.onload = null;
+  illustration.onerror = null;
+  illustration.hidden = true;
+  illustration.removeAttribute("src");
+  icon.hidden = !definition?.iconUrl;
+  icon.style.removeProperty("--signature-icon");
+  fallback.hidden = Boolean(definition?.iconUrl);
+
+  if (!definition) {
+    return;
+  }
+
+  if (definition.iconUrl) {
+    icon.style.setProperty(
+      "--signature-icon",
+      `url('${definition.iconUrl.replace(/'/g, "%27")}')`
+    );
+  }
+
+  async function showIconFallback() {
+    const available = definition.iconUrl &&
+      await canLoadSignatureSoundImage(definition.iconUrl);
+
+    if (renderId !== capsuleSignatureRenderId ||
+        capsuleView.hidden ||
+        !illustration.hidden) {
+      return;
+    }
+
+    icon.hidden = !available;
+    fallback.hidden = Boolean(available);
+  }
+
+  showIconFallback();
+
+  const visual = await resolveSignatureSoundVisual(signatureSound);
+
+  if (renderId !== capsuleSignatureRenderId ||
+      capsuleView.hidden ||
+      visual.type !== "illustration") {
+    return;
+  }
+
+  illustration.onload = function() {
+    if (renderId !== capsuleSignatureRenderId || capsuleView.hidden) {
+      return;
+    }
+
+    illustration.hidden = false;
+    icon.hidden = true;
+    fallback.hidden = true;
+  };
+
+  illustration.onerror = function() {
+    if (renderId !== capsuleSignatureRenderId || capsuleView.hidden) {
+      return;
+    }
+
+    illustration.onerror = null;
+    illustration.hidden = true;
+    illustration.removeAttribute("src");
+    showIconFallback();
+  };
+
+  illustration.src = visual.src;
+}
+
 function updateCapsuleViewContent(currentMemoryData) {
   if (!currentMemoryData) {
     return;
@@ -300,20 +381,7 @@ function updateCapsuleViewContent(currentMemoryData) {
     capsuleVisuals.classList.remove("is-resetting");
   });
 
-  const signatureSound = currentMemoryData.signatureSound;
-  const capsuleSignatureIcon = capsuleViewSignature.querySelector(".capsule-signature-action-icon");
-
-  capsuleViewSignature.hidden = !signatureSound;
-  capsuleViewSignatureValue.textContent = signatureSound?.label || "";
-
-  if (signatureSound) {
-    capsuleSignatureIcon.style.setProperty(
-      "--signature-icon",
-      getSignatureIconUrl(signatureSound.icon)
-    );
-  } else {
-    capsuleSignatureIcon.style.removeProperty("--signature-icon");
-  }
+  renderCapsuleSignatureSound(currentMemoryData.signatureSound);
 
   const capsuleId = createMemoryId(currentMemoryData);
   const collectionNames = exploreCollections
@@ -349,6 +417,11 @@ function updateCapsuleViewContent(currentMemoryData) {
 
 function openMemoryInCapsuleView(button) {
   const memory = getMemoryFromButton(button);
+
+  if (currentMemoryData) {
+    openCapsuleView(memory);
+    return;
+  }
 
   resetCardPlayer(currentButton);
   setVisibleCardButtonsInactive(button);

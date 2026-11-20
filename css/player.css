@@ -559,10 +559,11 @@
 }
 
 .capsule-info-card.capsule-signature-section {
+  --signature-visual-size: clamp(64px, 7vw, 88px);
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: var(--signature-visual-size) minmax(0, 1fr) auto;
   align-items: center;
-  gap: 16px;
+  gap: clamp(12px, 1.4vw, 18px);
 }
 
 .capsule-signature-section[hidden] {
@@ -572,10 +573,28 @@
 .capsule-signature-symbol {
   display: grid;
   place-items: center;
-  width: clamp(48px, 5vw, 64px);
-  height: clamp(48px, 5vw, 64px);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  width: var(--signature-visual-size);
+  height: var(--signature-visual-size);
+  padding: 0;
+  overflow: hidden;
   border-radius: 14px;
-  background: rgba(196, 122, 79, 0.09);
+  background: transparent;
+}
+
+.capsule-signature-illustration {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+  object-position: center;
+}
+
+.capsule-signature-symbol > [hidden] {
+  display: none;
 }
 
 .capsule-signature-action-icon {
@@ -591,6 +610,20 @@
   -webkit-mask-position: center;
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
+}
+
+.capsule-signature-fallback {
+  color: var(--copper);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.capsule-info-card .capsule-signature-caption {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .capsule-signature-copy {
@@ -622,8 +655,22 @@
 
 .capsule-signature-waveform {
   color: var(--copper);
-  font-size: 32px;
+  font-size: clamp(24px, 2.4vw, 32px);
   opacity: 0.65;
+}
+
+@media (max-width: 480px) {
+  .capsule-info-card.capsule-signature-section {
+    gap: 10px;
+  }
+
+  .capsule-signature-symbol {
+    border-radius: 12px;
+  }
+
+  .capsule-signature-copy {
+    gap: 4px;
+  }
 }
 
 .capsule-meta-row {

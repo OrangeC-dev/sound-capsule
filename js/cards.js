@@ -879,6 +879,71 @@ function createExplorePlayButton(memory, memoryId) {
   `;
 }
 
+async function renderExploreSignatureVisual(row, signatureSound) {
+  const container = row.querySelector(".explore-row-signature-visual");
+  const definition = getSignatureSoundDefinition(signatureSound);
+
+  if (!container || !definition) {
+    return;
+  }
+
+  const image = container.querySelector(".explore-row-signature-illustration");
+  const icon = container.querySelector(".explore-row-signature-icon");
+  const fallback = container.querySelector(".explore-row-signature-fallback");
+
+  if (definition.iconUrl) {
+    icon.style.setProperty(
+      "--signature-icon",
+      `url('${definition.iconUrl.replace(/'/g, "%27")}')`
+    );
+    icon.hidden = false;
+    fallback.hidden = true;
+  }
+
+  async function showIconFallback() {
+    const available = definition.iconUrl &&
+      await canLoadSignatureSoundImage(definition.iconUrl);
+
+    if (!row.isConnected || !image.hidden) {
+      return;
+    }
+
+    icon.hidden = !available;
+    fallback.hidden = Boolean(available);
+  }
+
+  showIconFallback();
+
+  const visual = await resolveSignatureSoundVisual(signatureSound);
+
+  if (!row.isConnected || visual.type !== "illustration") {
+    return;
+  }
+
+  image.onload = function() {
+    if (!row.isConnected) {
+      return;
+    }
+
+    image.hidden = false;
+    icon.hidden = true;
+    fallback.hidden = true;
+  };
+
+  image.onerror = function() {
+    if (!row.isConnected) {
+      return;
+    }
+
+    image.onerror = null;
+    image.hidden = true;
+    image.removeAttribute("src");
+    showIconFallback();
+  };
+
+  image.src = visual.src;
+}
+
 function createExploreCapsuleRow(memory) {
   const collection = getExploreCollectionById(currentExploreCollectionId);
   const memoryWithContext = addCollectionContext(
@@ -890,15 +955,17 @@ function createExploreCapsuleRow(memory) {
   const row = document.createElement("article");
   const memoryId = createMemoryId(memoryWithContext);
   const signature = memoryWithContext.signatureSound;
-  const signatureMarkup = signature
+  const signatureDefinition = getSignatureSoundDefinition(signature);
+  const signatureMarkup = signatureDefinition
     ? `
       <span class="explore-row-signature">
-        <span
-          class="explore-row-signature-icon"
-          style="--signature-icon: ${escapeAttribute(getSignatureIconUrl(signature.icon))}"
-          aria-hidden="true"
-        ></span>
-        <span>${escapeAttribute(signature.label)}</span>
+        <span class="explore-row-signature-visual" aria-hidden="true">
+          <img class="explore-row-signature-illustration"
+            alt="" decoding="async" draggable="false" hidden>
+          <span class="explore-row-signature-icon" hidden></span>
+          <i class="ph ph-waveform explore-row-signature-fallback"></i>
+        </span>
+        <span class="explore-row-signature-label">${escapeAttribute(signatureDefinition.label)}</span>
       </span>
     `
     : `<span class="explore-row-signature is-empty">—</span>`;
@@ -924,6 +991,8 @@ function createExploreCapsuleRow(memory) {
 
     ${createExplorePlayButton(memoryWithContext, memoryId)}
   `;
+
+  renderExploreSignatureVisual(row, signature);
 
   const rowThumbMap = row.querySelector(".explore-row-thumb-map");
 
