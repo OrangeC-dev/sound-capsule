@@ -146,6 +146,7 @@ function setupHomeInteractions() {
     const collection = getExploreCollectionById(collectionId);
     const count = getCollectionCapsuleCount(collectionId);
     const countLabel = button.querySelector("small");
+    let selectedThumbnail = "";
     const thumbnailImages = [...new Set(
       exploreCollections
         .filter(function(source) {
@@ -158,8 +159,8 @@ function setupHomeInteractions() {
 
     if (thumbnailImages.length) {
       const randomIndex = Math.floor(Math.random() * thumbnailImages.length);
-      const imageUrl = new URL(thumbnailImages[randomIndex], document.baseURI).href;
-      button.style.setProperty("--home-card-image", `url("${imageUrl}")`);
+      selectedThumbnail = new URL(thumbnailImages[randomIndex], document.baseURI).href;
+      button.style.setProperty("--home-card-image", `url("${selectedThumbnail}")`);
     }
 
     if (countLabel) {
@@ -167,7 +168,7 @@ function setupHomeInteractions() {
     }
 
     button.addEventListener("click", function() {
-      renderExploreCollectionList(collectionId);
+      renderExploreCollectionList(collectionId, selectedThumbnail);
     });
   });
 }

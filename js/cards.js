@@ -741,6 +741,7 @@ function renderExploreCountryCards(countries) {
 }
 
 function renderExploreWorld() {
+  renderExploreCollectionHeader();
   currentExploreCollectionId = null;
   currentExploreView = {
     level: "world",
@@ -782,6 +783,7 @@ function renderExploreWorld() {
 }
 
 function renderExploreCountry(countryId) {
+  renderExploreCollectionHeader();
   const country = getExploreCountryById(countryId);
   const collectionsHeader = document.querySelector(".explore-collections-header h3");
 
@@ -1047,13 +1049,73 @@ function renderExploreCapsuleRows(memories) {
   connectPlayButtons();
 }
 
-function renderExploreCollectionList(collectionId) {
+function renderExploreCollectionHeader(collection = null, country = null, memories = [], selectedImage = "") {
+  const artwork = document.getElementById("explore-collection-artwork");
+  const eyebrow = document.getElementById("explore-collection-eyebrow");
+  const count = document.getElementById("explore-collection-count");
+  const countValue = document.getElementById("explore-collection-count-value");
+
+  artwork.hidden = !collection;
+  eyebrow.hidden = !collection;
+  count.hidden = !collection;
+  artwork.style.removeProperty("--collection-header-image");
+
+  if (!collection) {
+    eyebrow.textContent = "";
+    countValue.textContent = "";
+    memorySubtitle.textContent = "";
+    return;
+  }
+
+  const scope = collection.type === "global"
+    ? "Global"
+    : collection.type === "editorial"
+      ? "Editorial"
+      : country?.name || "Archive";
+
+  const descriptions = {
+    parks: "From quiet corners to lively afternoons, discover everyday sounds in parks and gardens.",
+    streets: "From busy city life to quiet side lanes, discover the everyday sounds of streets.",
+    transport: "Arrivals, departures and the rhythms of journeys, preserved through sound.",
+    coastal: "Waves, flowing water and waterside moments, captured where land meets water.",
+    weather: "Rain, wind and changing skies, preserving the atmosphere of a moment.",
+    voices: "Conversations, gatherings and the sounds of shared spaces, captured in everyday life."
+  };
+
+  const description = typeof collection.description === "string"
+    ? collection.description.trim()
+    : "";
+
+  eyebrow.textContent = `${scope.toUpperCase()} / COLLECTION`;
+  memorySubtitle.textContent = description ||
+    descriptions[collection.theme] ||
+    `Explore the sounds and stories gathered in ${collection.name}.`;
+  countValue.textContent = `${memories.length} ${memories.length === 1 ? "Capsule" : "Capsules"}`;
+
+  let backgroundImage = "none";
+
+  try {
+    const source = selectedImage || collection.image;
+
+    if (source) {
+      const imageUrl = new URL(source, document.baseURI).href;
+      backgroundImage = `url("${imageUrl.replace(/"/g, "%22")}")`;
+    }
+  } catch {
+    backgroundImage = "none";
+  }
+
+  artwork.style.setProperty("--collection-header-image", backgroundImage);
+}
+
+function renderExploreCollectionList(collectionId, selectedImage = "") {
   const collection = getExploreCollectionById(collectionId);
 
   if (!collection) {
     return;
   }
 
+  const memories = getCollectionMemories(collectionId);
   const isSharedCollection = collection.type === "global" || collection.type === "editorial";
   const country = exploreArchive.countries.find(function(item) {
     return (item.collectionIds || []).includes(collectionId);
@@ -1078,9 +1140,10 @@ function renderExploreCollectionList(collectionId) {
 
   memoryTitle.innerHTML = `
     <button class="explore-back-button" type="button" aria-label="${isSharedCollection ? "Back to Ways to Listen" : "Back to country collections"}">←</button>
-    ${isSharedCollection ? `<span>${escapeAttribute(collection.name)}</span>` : ""}
+    <span>${escapeAttribute(collection.name)}</span>
   `;
-  memorySubtitle.textContent = "";
+
+  renderExploreCollectionHeader(collection, country, memories, selectedImage);
 
   const collectionsHeader = document.querySelector(".explore-collections-header h3");
 
@@ -1096,7 +1159,7 @@ function renderExploreCollectionList(collectionId) {
   }
 
   nowPlayingText.textContent = `Viewing ${collection.name}.`;
-  renderExploreCapsuleRows(getCollectionMemories(collectionId));
+  renderExploreCapsuleRows(memories);
 
   requestAnimationFrame(function() {
     appContent.scrollTo({ top: 0, behavior: "auto" });
@@ -1189,6 +1252,7 @@ function scrollMainContentToCards() {
 }
 
 function renderCollection(collectionId, collectionTitle) {
+  renderExploreCollectionHeader();
   const memories = collectionMemories[collectionId];
 
   memorySection.classList.remove("is-explore-landing");

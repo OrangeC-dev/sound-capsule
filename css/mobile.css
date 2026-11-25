@@ -375,24 +375,32 @@
   }
 
 .explore-section.is-explore-list {
+  --collection-bleed-inline: 10px;
+  --collection-bleed-top: 18px;
   margin-top: 0;
 }
 
 .explore-section.is-explore-list .explore-city-hero {
-  display: contents;
+  display: block;
 }
 
 .explore-section.is-explore-list .explore-city-content {
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 0;
 }
 
 .explore-section.is-explore-list .explore-city-copy {
-  left: auto;
-  right: auto;
-  bottom: auto;
+  min-height: 244px;
   margin: 0;
-  transform: none;
+  padding: 52px 8px 24px;
+}
+
+.explore-section.is-explore-list .explore-city-copy h2 {
+  font-size: clamp(30px, 8vw, 36px);
+}
+
+.explore-section.is-explore-list .explore-collection-count {
+  margin-top: 16px;
 }
 
   .explore-section.is-explore-landing .explore-city-content {
